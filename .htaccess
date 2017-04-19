@@ -1,0 +1,43 @@
+RewriteEngine On # Turn on the rewriting engine
+
+RewriteRule ^cargos/?$ Controller/CargoController.php [NC,L]
+RewriteRule ^cargos/([0-9]+)/?$ Controller/CargoController.php?cargo_id=$1 [NC,L]
+
+RewriteRule ^clientes/?$ Controller/ClienteController.php [NC,L]
+RewriteRule ^clientes/([0-9]+)/?$ Controller/ClienteController.php?clientes=$1 [NC,L]
+
+RewriteRule ^funcionarios/?$ Controller/FuncionarioController.php [NC,L]
+RewriteRule ^funcionarios/([0-9]+)/?$ Controller/FuncionarioController.php?funcionario_id=$1 [NC,L]
+
+RewriteRule ^clientes/?$ Controller/ClienteController.php [NC,L]
+RewriteRule ^clientes/([0-9]+)/?$ Controller/ClienteController.php?cliente_id=$1 [NC,L]
+
+RewriteRule ^usuarios/?$ Controller/UsuarioController.php [NC,L]
+RewriteRule ^usuarios/([0-9]+)/?$ Controller/UsuarioController.php?usuario_id=$1 [NC,L]
+
+RewriteRule ^auth/login?$ Auth/Login.php [NC,L]
+RewriteRule ^auth/login/([0-9]+)/?$ Auth/Login.php?login_id=$1 [NC,L]
+
+RewriteRule ^tipos-reparos/?$ Controller/TipoReparoController.php [NC,L]
+RewriteRule ^tipos-reparos/([0-9]+)/?$ Controller/TipoReparoController.php?tpReparo_id=$1 [NC,L]
+
+RewriteRule ^tipos-veiculos/?$ Controller/TipoVeiculoController.php [NC,L]
+RewriteRule ^tipos-veiculos/([0-9]+)/?$ Controller/TipoVeiculoController.php?tpveiculo_id=$1 [NC,L]
+
+RewriteRule ^reparos/?$ Controller/ReparoController.php [NC,L]
+RewriteRule ^reparos/([0-9]+)/?$ Controller/ReparoController.php?reparo_id=$1 [NC,L]
+
+RewriteRule ^modelos/?$ Controller/ModeloController.php [NC,L]
+RewriteRule ^modelos/([0-9]+)/?$ Controller/ModeloController.php?modelo_id=$1 [NC,L]
+
+RewriteRule ^marcas/?$ Controller/MarcaController.php [NC,L]
+RewriteRule ^marcas/([0-9]+)/?$ Controller/MarcaController.php?marca_id=$1 [NC,L]
+
+RewriteRule ^permissoes/?$ Controller/PermissaoController.php [NC,L]
+RewriteRule ^permissoes/([0-9]+)/?$ Controller/PermissaoController.php?permissao_id=$1 [NC,L]
+
+RewriteRule ^grupos/?$ Controller/GrupoController.php [NC,L]
+RewriteRule ^grupos/([0-9]+)/?$ Controller/GrupoController.php?grupo_id=$1 [NC,L]
+
+RewriteRule ^grupos-permissao/?$ Controller/GrupoPermissaoController.php [NC,L]
+RewriteRule ^grupos-permissao/([0-9]+)/?$ Controller/GrupoPermissaoController.php?grupo_id=$1 [NC,L]
