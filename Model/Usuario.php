@@ -18,8 +18,15 @@ class Usuario
                     $stmt->bindParam(':fk_funcionario', $_POST['funcionario_id'], PDO::PARAM_INT);
                     $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR);
                     $stmt->execute();
-                    $status = 1;
-                    $statusMessage = 'Usuario adicionado';
+                    $usuarioId=$db->lastInsertId();
+
+                    $query2 = "INSERT INTO usuarios_grupos (grupo_id,usuario_id) VALUES (:grupo_id,:usuario_id)";
+                    $stmt2 = $db->prepare($query2);
+                    $stmt2->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_INT);
+                    $stmt2->bindParam(':usuario_id', $usuarioId, PDO::PARAM_INT);
+                    $stmt2->execute();
+                    $status=1;
+                    $statusMessage='Usuario adicionado com sucesso';
                 } catch (PDOException $e) {
                     $status = 2;
                     $statusMessage = $e->getMessage();

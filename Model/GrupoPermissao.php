@@ -43,7 +43,7 @@ class GrupoPermissao
             $stmt = $db->prepare($query);
             $stmt->bindParam(':grupo_id', $grupo_id, PDO::PARAM_INT);
             $stmt->execute();
-            while ($row = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $response[] = $row;
             }
         } catch (PDOException $e) {
@@ -59,10 +59,12 @@ class GrupoPermissao
     function delete_grupo($grupo_id)
     {
         try {
+            parse_str(file_get_contents('php://input'), $post_vars);
             $db = Banco::conexao();
-            $query = "DELETE FROM grupos_permissoes WHERE grupo_id = :grupo_id";
+            $query = "DELETE FROM grupos_permissoes WHERE grupo_id = :grupo_id AND permissao_id=:permissao_id";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':grupo_id', $grupo_id, PDO::PARAM_INT);
+            $stmt->bindParam(':permissao_id', $post_vars['permissao_id'], PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() != 0) {
                 $response = array(
