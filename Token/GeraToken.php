@@ -12,7 +12,7 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 
 class GeraToken
 {
-    function gerar_token($permicao,$nome,$email)
+    function gerar_token($permicao,$nome,$cargo)
     {
         $signer = new Sha256();
         $token = (new Builder())->setIssuer('api.garage')// Configures the issuer (iss claim)
@@ -23,7 +23,7 @@ class GeraToken
         ->setExpiration(time() + 3600)// Configura a data de expiração do token
         ->set('Permição', $permicao)// Define a permicao para o sistema
         ->set('Nome', $nome)//Define o nome do usuario
-        ->set('Email',$email)//Define o email
+        ->set('Cargo',$cargo)//Define o email
         ->sign($signer, 'chave')// cria uma chave de assinatura privada
         ->getToken(); // Recupera o token
         return $token;

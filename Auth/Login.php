@@ -27,7 +27,7 @@ function fazer_login()
             $permicao = $validaUsuario->valida_permicao($login);
             $dados = $validaUsuario->valida_dados($login);
             $gerarToken = new GeraToken();
-            $token = $gerarToken->gerar_token($permicao, $dados['nome'], $dados['email']);
+            $token = $gerarToken->gerar_token($permicao, $dados['nome'], $dados['cargo']);
             $tokenString = (string)$token; // Transforma o token em uma string
             $response = array('Resposta' => 'Usuario Logado',
                 'Codigo' => '0',

@@ -34,7 +34,7 @@ class ValidaUsuario
     {
 
         $db = Banco::conexao();
-        $query = "SELECT f.nome,f.email from usuarios as u JOIN funcionarios as f on u.fk_funcionario=f.pk_funcionario WHERE u.login = :login";
+        $query = "SELECT f.nome as nome,c.nome as cargo from usuarios as u JOIN funcionarios as f on u.fk_funcionario=f.pk_funcionario JOIN cargos as c on c.pk_cargos=f.fk_cargo WHERE u.login = :login";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
         $stmt->execute();
