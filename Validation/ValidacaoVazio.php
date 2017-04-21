@@ -14,7 +14,7 @@ function verificaNome()
                 //return  100;//Preencha some com letras
                 //echo $post_vars;
                 $response["code"]="400";
-                $response["type"]="QueryStringException";
+
                 $response["message"]="Preencha some com letras";
                 header("HTTP/1.0 400.005");
                 return $response;
@@ -26,7 +26,36 @@ function verificaNome()
         }
         else{
              $response["code"]="400";
-             $response["type"]="QueryStringException";
+            $response["message"]="Campo não pode ser vazio";
+            header("HTTP/1.0 400.005");
+            return $response;
+        }
+
+
+
+    }
+
+    function verificaFk(){
+
+        parse_str(file_get_contents('php://input'), $post_vars);
+        $fk = $post_vars["fk"];
+        $response = array();
+
+        if($post_vars !=null){
+            if(empty($fk) || !preg_match("/^[0-9]+$/",$fk)){
+                //return  100;//Preencha some com letras
+                //echo $post_vars;
+                $response["code"]="400";
+                $response["message"]="Preencha some com numero a chave estrangeira";
+                header("HTTP/1.0 400.005");
+                return $response;
+            }else{
+                return 1;//tudo ok
+            }
+
+        }
+        else{
+            $response["code"]="400";
             $response["message"]="Campo não pode ser vazio";
             header("HTTP/1.0 400.005");
             return $response;

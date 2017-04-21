@@ -1,5 +1,6 @@
 <?php
 require_once '../Model/Marca.php';
+require_once '../Validation/ValidacaoVazio.php';
 
 $marca = new Marca();
 $request_method=$_SERVER["REQUEST_METHOD"];
@@ -21,13 +22,49 @@ switch($request_method)
         break;
     case 'POST':
 
-            $marca->insert();
+            $validacaoNome = new ValidacaoVazio();
+            $validacaoFk = new ValidacaoVazio();
+
+           $returnNome = $validacaoNome->verificaNome();
+           $returnFk =  $validacaoFk->verificaFk();
+
+           $response = array();
+            if($returnNome < 100 && $returnFk <100){
+                $marca->insert();
+
+            }else{
+                $response[] = $returnNome;
+                $response[] = $returnFk;
+                header('Content-Type: application/json');
+                echo json_encode($response);
+
+            }
+
+
 
         break;
     case 'PUT':
 
-        $marca_id=intval($_GET["marca_id"]);
-        $marca->update_Marca($marca_id);
+        $validacaoNome = new ValidacaoVazio();
+        $validacaoFk = new ValidacaoVazio();
+
+        $returnNome = $validacaoNome->verificaNome();
+        $returnFk =  $validacaoFk->verificaFk();
+
+        $response = array();
+        if($returnNome < 100 && $returnFk <100){
+            $marca_id=intval($_GET["marca_id"]);
+            $marca->update_Marcas($marca_id);
+
+        }else{
+            $response[] = $returnNome;
+            $response[] = $returnFk;
+            header('Content-Type: application/json');
+            echo json_encode($response);
+
+        }
+
+
         break;
     case 'DELETE':
         // Delete Product

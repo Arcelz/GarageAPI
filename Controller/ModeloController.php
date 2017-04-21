@@ -1,5 +1,6 @@
 <?php
 require_once '../Model/Modelo.php';
+require_once '../Validation/ValidacaoVazio.php';
 
 $modelo = new Modelo();
 $request_method=$_SERVER["REQUEST_METHOD"];
@@ -21,7 +22,18 @@ switch($request_method)
         break;
     case 'POST':
 
-            $modelo->insert();
+            $validacao = new ValidacaoVazio();
+            $returnValidacao = $validacao->verificaNome();
+
+            if($returnValidacao <100){
+                $modelo->insert();
+            }else{
+                //Aqui vai imprimir o resultado da validação
+                header('Content-Type: application/json');
+                echo json_encode($returnValidacao);
+
+            }
+
 
         break;
     case 'PUT':
@@ -38,5 +50,6 @@ switch($request_method)
     default:
         // Invalid Request Method
         header("HTTP/1.0 405 Method Not Allowed");
+        echo json_encode($response);
         break;
 }

@@ -2,20 +2,21 @@
 
 require 'Banco.php';
 
-Class Reparo{
-    function get_Reparo($id=0)
+Class TipoVeiculo{
+
+    function get_tpVeiculo($id=0)
     {
         try{
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query="SELECT * FROM reparos WHERE status ='ATIVO'";
+            $query="SELECT * FROM tipos_veiculos WHERE status ='ATIVO'";
 
             $response =array();
             if($id != 0)
             {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query .= " AND pk_reparo = :id LIMIT 1";
+                $query .= " AND pk_tipo = :id LIMIT 1";
 
             }
 
@@ -56,7 +57,7 @@ Class Reparo{
         echo json_encode($response);
     }
 
-    public function insert()
+    public function insert_tpVeiculo()
     {
 
         try {
@@ -64,20 +65,17 @@ Class Reparo{
 
             $status = 'ATIVO';
 
-            $query = "INSERT INTO reparos(status,fk_veiculo,fk_tipos,valor,descricao) values (:status,:fkVeiculo,:fkTipo,:valor,:descricao)";
+            $query = "INSERT INTO tipos_veiculos(nome,status) values (:nome,:status)";
             $stmt = $db->prepare($query);
 
-            $stmt->bindParam(':valor', $_POST['valor'], PDO::PARAM_STR);
-            $stmt->bindParam(':fkTipo', $_POST['fkTipo'], PDO::PARAM_STR);
-            $stmt->bindParam(':descricao', $_POST['descricao'], PDO::PARAM_STR);
-            $stmt->bindParam(':fkVeiculo', $_POST['fkVeiculo'], PDO::PARAM_STR);
+            $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
 
             $stmt->execute();
 
             $response = array(
                 'code'=>200,
-                'message'=>'Reparo adicionado.'
+                'message'=>'Tipo de Veiculo adicionado.'
             );
             header("HTTP/1.0 200 ");
 
@@ -94,25 +92,22 @@ Class Reparo{
         echo json_encode($response);
     }
 
-    function update_Reparos($id)
+    function update_tpVeiculo($id)
     {
 
         try {
             $db = Banco::conexao();
             parse_str(file_get_contents('php://input'), $post_vars);
 
-            $query = "UPDATE reparos  SET  descricao=:descricao, fk_veiculo=:fkVeiculo,fk_tipos=:fkTipo, valor=:valor WHERE pk_reparo= :id";
+            $query = "UPDATE tipos_veiculos  SET nome=:nome  WHERE pk_tipo=:id";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':fkTipo', $post_vars['fkTipo'], PDO::PARAM_STR);//fkTipo
-            $stmt->bindParam(':fkVeiculo', $post_vars['fkVeiculo'], PDO::PARAM_STR);//fkVeiculo
-            $stmt->bindParam(':valor', $post_vars['valor'], PDO::PARAM_STR);
-            $stmt->bindParam(':descricao', $post_vars['descricao'], PDO::PARAM_STR);
+            $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
 
             $stmt->execute();
             $response = array(
                 'code' => 200,
-                'message' => 'Reparo Atualizado com sucesso'
+                'message' => 'Tipo de Veiculo Atualizado com sucesso'
 
             );
             header("HTTP/1.0 200 ");
@@ -128,13 +123,13 @@ Class Reparo{
         echo json_encode($response);
     }
 
-    function delete_Reparos($id)
+    function delete_tpVeiculo($id)
     {
         try {
             $db = Banco::conexao();
             $status = 'DESATIVADO';
 
-            $query = "SELECT * FROM reparos WHERE status ='ATIVO' AND pk_reparo=:id";
+            $query = "SELECT * FROM tipos_veiculos WHERE status ='ATIVO' AND pk_tipo=:id";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -150,14 +145,14 @@ Class Reparo{
                 );
                 header("HTTP/1.0 404 ");
             } else {
-                $query = "UPDATE  reparos SET status='{$status}' WHERE pk_reparo= :id";
+                $query = "UPDATE  tipos_veiculos SET status='{$status}' WHERE pk_tipo= :id";
                 $stmt = $db->prepare($query);
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
 
                 $response = array(
                     'code' => 200,
-                    'message' => 'Reparo Excluido com Sucesso'
+                    'message' => 'Tipo de Veiculo Excluido com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }

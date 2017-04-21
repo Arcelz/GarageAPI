@@ -10,12 +10,12 @@ switch($request_method)
         if(!empty($_GET["Reparo_id"]))
         {
             $reeparo_id=intval($_GET["Reparo_id"]);
-            $reparo->get_Reparos($tpReparo_id);
+            $reparo->get_Reparo($reparo_id);
 
         }
         else
         {
-            $reparo->get_Reparos();
+            $reparo->get_Reparo();
 
         }
         break;
@@ -27,12 +27,12 @@ switch($request_method)
     case 'PUT':
 
         $reparo_id=intval($_GET["reparo_id"]);
-        $reparo->update_tpReparos($tpReparo_id);
+        $reparo->update_Reparos($reparo_id);
         break;
     case 'DELETE':
         // Delete Product
-        $tpReparo_id=intval($_GET["tpReparo_id"]);
-        $tpReparo->delete_tpReparos($tpReparo_id);
+        $reparo_id=intval($_GET["reparo_id"]);
+        $reparo->delete_Reparos($reparo_id);
 
         break;
     default:

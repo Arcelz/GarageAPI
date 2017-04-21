@@ -1,33 +1,57 @@
 <?php
 
-require 'Database.php';
+require 'Banco.php';
 
 Class TipoReparo{
-
-
-
-    function get_tpReparos($cargos_id=0)
+    function get_tpReparo($id=0)
     {
-        $db = Database::getInstance();
+        try{
+            $db = Banco::conexao();
 
-        //SELECT * FRON funcionarios AS f JOIN funcionarios_enderecos AS fe ON f.pk_funcionario = fe.fk_funcionario
-        $query=$db->query("SELECT * FROM tipos_reparos WHERE status ='ATIVO'");
-        // mysqli_close($db);
+            //Essa query busca todos os regestritos
+            $query="SELECT * FROM tipos_reparos WHERE status ='ATIVO'";
 
-        if($cargos_id != 0)
-        {
+            $response =array();
+            if($id != 0)
+            {
+                //busca pelo id. Caso o id informando nao seja certo retorna 404.
+                $query .= " AND pk_tipo = :id LIMIT 1";
 
-            $query=$db->query("SELECT * FROM tipos_reparos WHERE status ='ATIVO' AND pk_tipo=".$cargos_id);
+            }
 
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $row = $stmt->fetchAll();
+            //var_dump($row);
+
+
+            if($row == null) {
+                $response = array(
+                    'code'=>404,
+                    'message' => 'Recurso nao encontrado'
+                );
+                header("HTTP/1.0 404 ");
+
+            }else{
+                $stmt->execute();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                    //$response[]= $row;
+                    array_push($response,$row);
+                }
+
+            }
+
+        }catch(PDOException $e){
+            $response = array(
+                'code'=>400,
+                'message'=>$e->getMessage()
+            );
+            header("HTTP/1.0 400 ");
         }
-        mysqli_close($db);
-        $response=array();
-        $result=$query;
 
-        while($row=mysqli_fetch_array($result))
-        {
-            $response[]=$row;
-        }
+
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
@@ -35,90 +59,110 @@ Class TipoReparo{
     public function insert()
     {
 
-        $db = Database::getInstance();
+        try {
+            $db = Banco::conexao();
 
-        $nome = isset( $_POST['nome'] ) ? $_POST['nome']  : '' ;
-        $status ='ATIVO';
-        $nome = mysqli_real_escape_string($db,$nome);
+            $status = 'ATIVO';
 
-        $result = $db->query("INSERT INTO tipos_reparos(nome,status) values ('{$nome}','{$status}')");
+            $query = "INSERT INTO tipos_reparos(nome,status) values (:nome,:status)";
+            $stmt = $db->prepare($query);
 
-        if($result){
+            $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
+            $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+
+            $stmt->execute();
 
             $response = array(
-                'status'=>1,
-                'status_message'=>'Tipo de Reparo inserido com sucesso.'
+                'code'=>200,
+                'message'=>'Tipo de Reparo adicionado.'
             );
-        }
-        else{
-            $response=array(
-                'status'=>0,
-                'Error Mysql: '=>mysqli_error($db)
+            header("HTTP/1.0 200 ");
 
-            );
         }
-        mysqli_close($db);
+        catch (PDOException $e){
+            $response = array(
+                'code'=>400,
+                'message'=>$e->getMessage()
+            );
+            header("HTTP/1.0 400 ");
+        }
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    function update_tpReparos($cargos_id)
+    function update_tpReparo($id)
     {
 
-        $db = Database::getInstance();
-        parse_str(file_get_contents('php://input'), $post_vars);
-        $nome = $post_vars["nome"];
+        try {
+            $db = Banco::conexao();
+            parse_str(file_get_contents('php://input'), $post_vars);
 
-        $nome = mysqli_real_escape_string($db,$nome);
+            $query = "UPDATE tipos_reparos  SET nome=:nome  WHERE pk_tipo=:id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
 
-
-        $query=$db->query("UPDATE tipos_reparos  SET nome='{$nome}'  WHERE pk_tipo=".$cargos_id);
-
-        if($query)
-        {
-            $response=array(
-                'status' => 1,
-                'status_message' =>'Tipo de Reparo Atualizado com sucesso'
+            $stmt->execute();
+            $response = array(
+                'code' => 200,
+                'message' => 'Tipo de Reparo Atualizado com sucesso'
 
             );
-        }
-        else
-        {
+            header("HTTP/1.0 200 ");
+        }catch (PDOException $e){
             $response=array(
-                'status' => 0,
-                'error Mysql: ' =>mysqli_error($db)
+                'code' => 400,
+                'errorMysql: ' =>$e->getMessage()
             );
 
         }
-        mysqli_close($db);
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    function delete_tpReparos($cargos_id)
+    function delete_tpReparo($id)
     {
-        $db = Database::getInstance();
-        $status = 'DESATIVADO';
+        try {
+            $db = Banco::conexao();
+            $status = 'DESATIVADO';
+
+            $query = "SELECT * FROM tipos_reparos WHERE status ='ATIVO' AND pk_tipo=:id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $row = $stmt->fetchAll();
 
 
-        $query=$db->query("UPDATE  tipos_reparos SET status='{$status}' WHERE pk_tipo=".$cargos_id);
+            //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
+            if ($row == null) {
+                $response = array(
+                    'code' => 404,
+                    'message' => 'Recurso nao encontrado'
 
+                );
+                header("HTTP/1.0 404 ");
+            } else {
+                $query = "UPDATE  tipos_reparos SET status='{$status}' WHERE pk_tipo= :id";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
 
-        if($query > 0)
-        {
+                $response = array(
+                    'code' => 200,
+                    'message' => 'Tipo de Reparo Excluido com Sucesso'
+                );
+                header("HTTP/1.0 200 ");
+            }
+        }
+        catch (PDOException $e){
             $response=array(
-                'status' => 1,
-                'status_message' =>'Produto excluido com sucesso'
+                'code' => 400,
+                'errorMysql: ' =>$e->getMessage()
             );
         }
-        else
-        {
-            $response=array(
-                'status' => 0,
-                'error Mysql: ' =>mysqli_error($db)
-            );
-        }
-        mysqli_close($db);
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
