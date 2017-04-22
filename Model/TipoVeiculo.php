@@ -2,19 +2,19 @@
 
 require 'Banco.php';
 
-Class TipoVeiculo{
+Class TipoVeiculo
+{
 
-    function get_tpVeiculo($id=0)
+    function get_tpVeiculo($id = 0)
     {
-        try{
+        try {
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query="SELECT * FROM tipos_veiculos WHERE status ='ATIVO'";
+            $query = "SELECT * FROM tipos_veiculos WHERE status ='ATIVO'";
 
-            $response =array();
-            if($id != 0)
-            {
+            $response = array();
+            if ($id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
                 $query .= " AND pk_tipo = :id LIMIT 1";
 
@@ -27,26 +27,26 @@ Class TipoVeiculo{
             //var_dump($row);
 
 
-            if($row == null) {
+            if ($row == null) {
                 $response = array(
-                    'code'=>404,
+                    'code' => 404,
                     'message' => 'Recurso nao encontrado'
                 );
                 header("HTTP/1.0 404 ");
 
-            }else{
+            } else {
                 $stmt->execute();
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     //$response[]= $row;
-                    array_push($response,$row);
+                    array_push($response, $row);
                 }
 
             }
 
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             $response = array(
-                'code'=>400,
-                'message'=>$e->getMessage()
+                'code' => 400,
+                'message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
         }
@@ -74,16 +74,15 @@ Class TipoVeiculo{
             $stmt->execute();
 
             $response = array(
-                'code'=>200,
-                'message'=>'Tipo de Veiculo adicionado.'
+                'code' => 200,
+                'message' => 'Tipo de Veiculo adicionado.'
             );
             header("HTTP/1.0 200 ");
 
-        }
-        catch (PDOException $e){
+        } catch (PDOException $e) {
             $response = array(
-                'code'=>400,
-                'message'=>$e->getMessage()
+                'code' => 400,
+                'message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
         }
@@ -111,10 +110,10 @@ Class TipoVeiculo{
 
             );
             header("HTTP/1.0 200 ");
-        }catch (PDOException $e){
-            $response=array(
+        } catch (PDOException $e) {
+            $response = array(
                 'code' => 400,
-                'errorMysql: ' =>$e->getMessage()
+                'errorMysql: ' => $e->getMessage()
             );
 
         }
@@ -156,11 +155,10 @@ Class TipoVeiculo{
                 );
                 header("HTTP/1.0 200 ");
             }
-        }
-        catch (PDOException $e){
-            $response=array(
+        } catch (PDOException $e) {
+            $response = array(
                 'code' => 400,
-                'errorMysql: ' =>$e->getMessage()
+                'errorMysql: ' => $e->getMessage()
             );
         }
         unset($db);

@@ -2,19 +2,19 @@
 
 require 'Banco.php';
 
-Class Veiculo{
+Class Veiculo
+{
 
-    function get_Veiculo($id=0)
+    function get_Veiculo($id = 0)
     {
-        try{
+        try {
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query="SELECT * FROM veiculos WHERE status ='ATIVO'";
+            $query = "SELECT * FROM veiculos WHERE status ='ATIVO'";
 
-            $response =array();
-            if($id != 0)
-            {
+            $response = array();
+            if ($id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
                 $query .= " AND pk_veiculo = :id LIMIT 1";
 
@@ -27,30 +27,29 @@ Class Veiculo{
             //var_dump($row);
 
 
-            if($row == null) {
+            if ($row == null) {
                 $response = array(
-                    'code'=>404,
+                    'code' => 404,
                     'message' => 'Recurso nao encontrado'
                 );
                 header("HTTP/1.0 404 ");
 
-            }else{
+            } else {
                 $stmt->execute();
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     //$response[]= $row;
-                    array_push($response,$row);
+                    array_push($response, $row);
                 }
 
             }
 
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             $response = array(
-                'code'=>400,
-                'message'=>$e->getMessage()
+                'code' => 400,
+                'message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
         }
-
 
 
         header('Content-Type: application/json');
@@ -81,16 +80,15 @@ Class Veiculo{
             $stmt->execute();
 
             $response = array(
-                'code'=>200,
-                'message'=>'Veiculo adicionado.'
+                'code' => 200,
+                'message' => 'Veiculo adicionado.'
             );
             header("HTTP/1.0 200 ");
 
-        }
-        catch (PDOException $e){
+        } catch (PDOException $e) {
             $response = array(
-                'code'=>400,
-                'message'=>$e->getMessage()
+                'code' => 400,
+                'message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
         }
@@ -117,7 +115,6 @@ Class Veiculo{
             $stmt->bindParam(':valorVenda', $post_vars['valorVenda'], PDO::PARAM_STR);
 
 
-
             $stmt->execute();
             $response = array(
                 'code' => 200,
@@ -125,10 +122,10 @@ Class Veiculo{
 
             );
             header("HTTP/1.0 200 ");
-        }catch (PDOException $e){
-            $response=array(
+        } catch (PDOException $e) {
+            $response = array(
                 'code' => 400,
-                'errorMysql: ' =>$e->getMessage()
+                'errorMysql: ' => $e->getMessage()
             );
 
         }
@@ -171,11 +168,10 @@ Class Veiculo{
                 );
                 header("HTTP/1.0 200 ");
             }
-        }
-        catch (PDOException $e){
-            $response=array(
+        } catch (PDOException $e) {
+            $response = array(
                 'code' => 400,
-                'errorMysql: ' =>$e->getMessage()
+                'errorMysql: ' => $e->getMessage()
             );
         }
 

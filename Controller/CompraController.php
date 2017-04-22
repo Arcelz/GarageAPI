@@ -1,25 +1,29 @@
 <?php
-require_once '../Model/Veiculo.php';
+require_once '../Model/Compra.php';
 require_once '../Validation/ValidacaoVazio.php';
 require_once '../Validation/ValidaToken.php';
-
-$veiculo = new Veiculo();
+$compra = new Compra();
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
 
 $permicao = $validaToken->token();
+
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
+
     case 'GET':
 
         $verificado = true;
         foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '23V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                if (!empty($_GET["veiculo_id"])) {
-                    $veiculo_id = intval($_GET["veiculo_id"]);
-                    $veiculo->get_Veiculo($veiculo_id);
+            if ($valor == '4V
+            
+            '
+            ) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+                if (!empty($_GET["compra_id"])) {
+                    $compra_id = intval($_GET["compra_id"]);
+                    $compra->get_Comra($compra_id);
 
                 } else {
-                    $veiculo->get_Veiculo();
+                    $compra->get_Comra();
 
                 }
                 return $verificado = false;
@@ -34,8 +38,8 @@ switch ($request_method) {
     case 'POST':
         $verificado = true;
         foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '23C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $veiculo->insert_Veiculo();
+            if ($valor == '4C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+                $compra->insert_Compra();
                 return $verificado = false;
             }
         }
@@ -43,14 +47,15 @@ switch ($request_method) {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
+
         break;
     case 'PUT':
 
         $verificado = true;
         foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '23C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $veiculo_id = intval($_GET["veiculo_id"]);
-                $veiculo->update_Veiculo($veiculo_id);
+            if ($valor == '4C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+                $compra_id = intval($_GET["compra_id"]);
+                $compra->update_Compra($compra_id);
                 return $verificado = false;
             }
         }
@@ -64,22 +69,18 @@ switch ($request_method) {
 
         $verificado = true;
         foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '23D') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $veiculo_id = intval($_GET["veiculo_id"]);
-                $veiculo->delete_Veiculo($veiculo_id);
-
+            if ($valor == '4D') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+                $compra_id = intval($_GET["compra_id"]);
+                $compra->delete_Compra($compra_id);
                 return $verificado = false;
             }
         }
         if ($verificado) {
             header("HTTP/1.0 203 Acesso não permitido");
         }
-
-
         break;
     default:
-
+        // Invalid Request Method
         header("HTTP/1.0 405 Method Not Allowed");
-        echo json_encode($response);
         break;
 }

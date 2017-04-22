@@ -2,21 +2,21 @@
 
 require 'Banco.php';
 
-Class Fornecedor
+Class Compra
 {
 
-    function get_Fornecedor($id = 0)
+    function get_Comra($id = 0)
     {
         try {
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT * FROM fornecedores WHERE status ='ATIVO'";
+            $query = "SELECT * FROM compras WHERE status ='ATIVO'";
 
             $response = array();
             if ($id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query .= " AND pk_fornecedor = :id LIMIT 1";
+                $query = " SELECT * FROM compras AS c LEFT JOIN compras_itens AS ci ON c.pk_compra = ci.fk_compra WHERE c.pk_compra = :id AND status ='ATIVO'";
 
             }
 
@@ -24,7 +24,6 @@ Class Fornecedor
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $row = $stmt->fetchAll();
-
 
             if ($row == null) {
                 $response = array(
@@ -49,54 +48,67 @@ Class Fornecedor
             );
             header("HTTP/1.0 400 ");
         }
-        unset($db);
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    public function insert_Fornecedor()
+
+    public function insert_Compra()
     {
 
         try {
             $db = Banco::conexao();
             $status = 'ATIVO';
 
-            $query = "INSERT INTO fornecedores(nome,cpf,email,contato1,contato,status) values (:nome,:cpf,:email,:contato1,:contato,:status)";
-            $stmt = $db->prepare($query);
-
-            $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
-            $stmt->bindParam(':cpf', $_POST['cpf'], PDO::PARAM_STR);
-            $stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':contato1', $_POST['contato1'], PDO::PARAM_STR);
-            $stmt->bindParam(':contato', $_POST['contato'], PDO::PARAM_STR);
-            $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+            //Este bloco é responsavel por retornar o ultimo registro de venda realizado.
+            //Usamos este metado para mostrar organizado a quantidade de venda realizada. Para não ter que usar o id.
+            $queryCont = "SELECT pk_compra,numero FROM compras ORDER BY pk_compra DESC LIMIT 1 ";
+            $stmt = $db->prepare($queryCont);
             $stmt->execute();
 
-            $te = $stmt->rowCount();
-            //var_dump($te);
-            if ($te > 0) {
-                $fk_cliente = $db->lastInsertId();
+            $returnNumero = $stmt->fetch(PDO::FETCH_ASSOC);
+            $numero = $returnNumero['numero'] + 1;
+            // ======== =========== ==========================
+
+            $query = "INSERT INTO compras(fk_fornecedor,fk_funcionario,datas,valor_compra,status,numero) values 
+                (:fkFornecedor, :fkFuncionario,:datas,:valorCompra,:status,:numero )";
+            $stmt = $db->prepare($query);
+
+            $stmt->bindParam(':fkFornecedor', $_POST['fkFornecedor'], PDO::PARAM_INT);
+            $stmt->bindParam(':fkFuncionario', $_POST['fkFuncionario'], PDO::PARAM_INT);
+            $stmt->bindParam(':datas', $_POST['data'], PDO::PARAM_STR);
+            $stmt->bindParam(':valorCompra', $_POST['valorCompra'], PDO::PARAM_STR);
+            $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+            $stmt->bindParam(':numero', $numero, PDO::PARAM_INT);
+            $stmt->execute();
+
+
+            //Este bloco é responsavel pela inserção das vendas itens. usamos a variavel $returnn para verificar se
+            // foi inserido a venda corretamente. Caso sim cai no IF e salva a vendas_itens
+            $returnn = $stmt->rowCount();
+
+            if ($returnn > 0) {
+                $fk_compra = $db->lastInsertId();//retorna o ultimo id
+
                 //("INSERT INTO clientes_enderecos(logradouro,bairro,cidade,estado,pais,cep,fk_cliente)
-                $query2 = "INSERT INTO fornecedores_enderecos(logradouro,bairro,cidade,estado,pais,cep,fk_fornecedor) 
-                    values (:logradouro,:bairro,:cidade,:estado,:pais,:cep,:fk_cliente)";
+                $query2 = "INSERT INTO compras_itens(fk_compra,fk_veiculo,valor_compra) 
+                    values (:fkCompra,:fkVeiculo,:valorCompra)";
                 $stmt = $db->prepare($query2);
 
-                $stmt->bindParam(':logradouro', $_POST['logradouro'], PDO::PARAM_STR);
-                $stmt->bindParam(':bairro', $_POST['bairro'], PDO::PARAM_STR);
-                $stmt->bindParam(':cidade', $_POST['cidade'], PDO::PARAM_STR);
-                $stmt->bindParam(':estado', $_POST['estado'], PDO::PARAM_STR);
-                $stmt->bindParam(':pais', $_POST['pais'], PDO::PARAM_STR);
-                $stmt->bindParam(':cep', $_POST['cep'], PDO::PARAM_STR);
-                $stmt->bindParam(':fk_cliente', $fk_cliente, PDO::PARAM_INT);
+                $stmt->bindParam(':fkCompra', $fk_compra, PDO::PARAM_INT);
+                $stmt->bindParam(':fkVeiculo', $_POST['fkVeiculo'], PDO::PARAM_INT);
+                $stmt->bindParam(':valorCompra', $_POST['valorCompra'], PDO::PARAM_STR);
+
                 $stmt->execute();
 
                 $response = array(
                     'code' => 200,
-                    'message' => 'Fornecedor adicionado.'
+                    'message' => 'Compra realizada.'
                 );
                 header("HTTP/1.0 200 ");
             }
-
+            // ======== =========== ==========================
         } catch (PDOException $e) {
             $response = array(
                 'code' => 400,
@@ -105,12 +117,12 @@ Class Fornecedor
             header("HTTP/1.0 400 ");
 
         }
-        unset($db);
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    function update_Fornecedor($id)
+    function update_Compra($id)
     {
 
         try {
@@ -121,43 +133,41 @@ Class Fornecedor
 
             /// UPDATE funcionarios AS f LEFT JOIN funcionarios_enderecos as fe ON f.pk_funcionario = fe.fk_funcionario SET f.nome = nome
             //WHERE f.pk_funcionario = ??
-            $query = "UPDATE fornecedores AS f  JOIN fornecedores_enderecos AS fe ON f.pk_fornecedor = fe.fk_fornecedor
-          SET f.nome=:nome,f.cpf=:cpf,f.email=:email,f.contato1=:contato1,fe.logradouro=:logradouro,fe.bairro=:bairro,fe.cidade=:cidade,
-            fe.estado=:estado,fe.pais=:pais,fe.cep=:cep,f.contato=:contato  WHERE f.pk_fornecedor= :pk_fornecedor";
+            $query = "UPDATE compras AS co LEFT JOIN compras_itens AS ci ON co.pk_compra = ci.fk_compra
+			SET co.fk_fornecedor = :fkFornecedor, co.fk_funcionario = :fkFuncionario, co.datas = :datas, ci.fk_veiculo = :fkVeiculo, ci.valor_compra =:valorCompra
+			WHERE co.pk_compra=:id";
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':pk_fornecedor', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
-            $stmt->bindParam(':cpf', $post_vars['cpf'], PDO::PARAM_STR);
-            $stmt->bindParam(':email', $post_vars['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':contato', $post_vars['contato'], PDO::PARAM_STR);
-            $stmt->bindParam(':contato1', $post_vars['contato1'], PDO::PARAM_STR);
-            $stmt->bindParam(':estado', $post_vars['estado'], PDO::PARAM_STR);
-            $stmt->bindParam(':logradouro', $post_vars['logradouro'], PDO::PARAM_STR);
-            $stmt->bindParam(':bairro', $post_vars['bairro'], PDO::PARAM_STR);
-            $stmt->bindParam(':cidade', $post_vars['cidade'], PDO::PARAM_STR);
-            $stmt->bindParam(':pais', $post_vars['pais'], PDO::PARAM_STR);
-            $stmt->bindParam(':cep', $post_vars['cep'], PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':fkFornecedor', $post_vars['fkFornecedor'], PDO::PARAM_INT);
+            $stmt->bindParam(':fkFuncionario', $post_vars['fkFuncionario'], PDO::PARAM_INT);
+            $stmt->bindParam(':datas', $post_vars['datas'], PDO::PARAM_STR);
+            $stmt->bindParam(':fkVeiculo', $post_vars['fkVeiculo'], PDO::PARAM_STR);
+            $stmt->bindParam(':valorCompra', $post_vars['valorCompra'], PDO::PARAM_STR);
+
 
             $stmt->execute();
             $response = array(
                 'code' => 200,
-                'message' => 'Fornecedor Atualizado com sucesso'
-            );
+                'message' => 'Cliente Atualizado com sucesso'
 
+
+            );
+            header("HTTP/1.0 400 ");
         } catch (PDOException $e) {
             $response = array(
                 'code' => 400,
                 'errorMysql: ' => $e->getMessage()
             );
-            header("HTTP/1.0 400 ");
+
         }
-        unset($db);
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    function delete_Fornecedor($id)
+
+    function delete_Compra($id)
     {
 
         try {
@@ -165,9 +175,9 @@ Class Fornecedor
             $db = Banco::conexao();
             $status = 'DESATIVADO';
 
-            $query = "SELECT * FROM fornecedores WHERE status ='ATIVO' AND pk_fornecedor=:pk_fornecedor";
+            $query = "SELECT * FROM compras WHERE status ='ATIVO' AND pk_compra=:id";
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':pk_fornecedor', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $row = $stmt->fetchAll();
 
@@ -181,14 +191,14 @@ Class Fornecedor
 
                 header("HTTP/1.0 404 ");
             } else {
-                $query = "UPDATE  fornecedores SET status='{$status}' WHERE pk_fornecedor=:pk_fornecedor";
+                $query = "UPDATE  compras SET status='{$status}' WHERE pk_compra= :id";
                 $stmt = $db->prepare($query);
-                $stmt->bindParam(':pk_fornecedor', $id, PDO::PARAM_INT);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
 
                 $response = array(
                     'code' => 200,
-                    'message' => 'Fornecedor Excluido com Sucesso'
+                    'message' => 'Compra Excluida com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }
@@ -206,5 +216,10 @@ Class Fornecedor
         header('Content-Type: application/json');
         echo json_encode($response);
     }
+
 }
+
+
+
+
 

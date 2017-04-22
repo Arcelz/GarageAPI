@@ -3,18 +3,18 @@
 require 'Banco.php';
 
 
-Class Cargo{
-    function get_cargo($product_id=0)
+Class Cargo
+{
+    function get_cargo($product_id = 0)
     {
-        try{
+        try {
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query="SELECT * FROM cargos WHERE status ='ATIVO'";
+            $query = "SELECT * FROM cargos WHERE status ='ATIVO'";
 
-            $response =array();
-            if($product_id != 0)
-            {
+            $response = array();
+            if ($product_id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
                 $query .= " AND pk_cargos = :cargo_id LIMIT 1";
 
@@ -27,26 +27,26 @@ Class Cargo{
             //var_dump($row);
 
 
-            if($row == null) {
+            if ($row == null) {
                 $response = array(
-                    'code'=>404,
+                    'code' => 404,
                     'message' => 'Recurso nao encontrado'
                 );
                 header("HTTP/1.0 404 ");
 
-            }else{
+            } else {
                 $stmt->execute();
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     //$response[]= $row;
-                    array_push($response,$row);
+                    array_push($response, $row);
                 }
 
             }
 
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             $response = array(
-                'code'=>400,
-                'message'=>$e->getMessage()
+                'code' => 400,
+                'message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
         }
@@ -72,17 +72,18 @@ Class Cargo{
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
             $stmt->execute();
 
+
             $response = array(
-              'code'=>200,
-                'message'=>'Cargo adicionado.'
+                'code' => 200,
+                'message' => 'Cargo adicionado.'
+
             );
             header("HTTP/1.0 200 ");
 
-        }
-        catch (PDOException $e){
+        } catch (PDOException $e) {
             $response = array(
-                'code'=>400,
-                'message'=>$e->getMessage()
+                'code' => 400,
+                'message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
         }
@@ -110,10 +111,10 @@ Class Cargo{
 
             );
             header("HTTP/1.0 200 ");
-        }catch (PDOException $e){
-            $response=array(
+        } catch (PDOException $e) {
+            $response = array(
                 'code' => 400,
-                'errorMysql: ' =>$e->getMessage()
+                'errorMysql: ' => $e->getMessage()
             );
 
         }
@@ -155,11 +156,10 @@ Class Cargo{
                 );
                 header("HTTP/1.0 200 ");
             }
-        }
-        catch (PDOException $e){
-            $response=array(
+        } catch (PDOException $e) {
+            $response = array(
                 'code' => 400,
-                'errorMysql: ' =>$e->getMessage()
+                'errorMysql: ' => $e->getMessage()
             );
         }
         unset($db);
