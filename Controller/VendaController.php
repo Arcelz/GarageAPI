@@ -5,7 +5,9 @@ require_once '../Validation/ValidaToken.php';
 $venda = new Venda();
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
 
-$permicao = $validaToken->token();require_once '../Validation/ValidaToken.php';
+$permicao = $validaToken->token();
+
+header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
 

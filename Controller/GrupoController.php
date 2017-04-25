@@ -5,6 +5,7 @@ require_once '../Validation/ValidaToken.php';
 
 $grupo = new Grupo();//instancia a classe de usuario para a chamada das funcoes
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+header('Access-Control-Allow-Origin: *');
 $permicao=$validaToken->token();
         $request_method = $_SERVER["REQUEST_METHOD"];
         switch ($request_method) {

@@ -3,7 +3,10 @@ require_once '../Model/Fornecedor.php';
 require_once '../Validation/ValidacaoVazio.php';
 
 $fornecedor = new Fornecedor();
+$validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
 
+$permicao = $validaToken->token();
+header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
 

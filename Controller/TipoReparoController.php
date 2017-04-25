@@ -5,8 +5,10 @@ require_once '../Validation/ValidaToken.php';
 
 $tpReparo = new TipoReparo();
 
-$usuario = new Usuario();//instancia a classe de usuario para a chamada das funcoes
+
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+$permicao=$validaToken->token();
+header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
     case 'GET':
