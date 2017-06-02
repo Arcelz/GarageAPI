@@ -1,9 +1,27 @@
 <?php
 
 require 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 Class Fornecedor
 {
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+
+
 
     function get_Fornecedor($id = 0)
     {
@@ -16,7 +34,8 @@ Class Fornecedor
             $response = array();
             if ($id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query .= " AND pk_fornecedor = :id LIMIT 1";
+                $query = " SELECT * FROM fornecedores AS f LEFT JOIN fornecedores_enderecos AS fe ON f.pk_fornecedor = fe.fk_fornecedor
+ WHERE status ='ATIVO' AND f.pk_fornecedor = :id LIMIT 1";
 
             }
 
@@ -27,11 +46,11 @@ Class Fornecedor
 
 
             if ($row == null) {
-                $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+              $response = array(
+                    'status' => 400,
+                    'status_message' => 'Nao foi possivel realizar a pesquisa'
                 );
-                header("HTTP/1.0 404 ");
+                header("HTTP/1.0 400 ");
 
             } else {
                 $stmt->execute();
@@ -44,10 +63,14 @@ Class Fornecedor
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Pesquisando .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         unset($db);
         header('Content-Type: application/json');
@@ -91,18 +114,22 @@ Class Fornecedor
                 $stmt->execute();
 
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Fornecedor adicionado.'
+                    'status' => 200,
+                    'status_message' => 'Fornecedor adicionado.'
                 );
                 header("HTTP/1.0 200 ");
             }
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Inserido ....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         unset($db);
@@ -126,7 +153,7 @@ Class Fornecedor
             fe.estado=:estado,fe.pais=:pais,fe.cep=:cep,f.contato=:contato  WHERE f.pk_fornecedor= :pk_fornecedor";
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':pk_fornecedor', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':pk_fornecedor',  $post_vars['pk_fornecedor'], PDO::PARAM_INT);
             $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
             $stmt->bindParam(':cpf', $post_vars['cpf'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $post_vars['email'], PDO::PARAM_STR);
@@ -141,16 +168,20 @@ Class Fornecedor
 
             $stmt->execute();
             $response = array(
-                'code' => 200,
-                'message' => 'Fornecedor Atualizado com sucesso'
+                'status' => 200,
+                'status_message' => 'Fornecedor Atualizado com sucesso'
             );
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Update.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         unset($db);
         header('Content-Type: application/json');
@@ -174,8 +205,8 @@ Class Fornecedor
             //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
             if ($row == null) {
                 $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                    'status' => 404,
+                    'status_message' => 'Recurso nao encontrado'
 
                 );
 
@@ -187,8 +218,8 @@ Class Fornecedor
                 $stmt->execute();
 
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Fornecedor Excluido com Sucesso'
+                    'status' => 200,
+                    'status_message' => 'Fornecedor Excluido com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }
@@ -196,10 +227,14 @@ Class Fornecedor
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "delete.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         unset($db);

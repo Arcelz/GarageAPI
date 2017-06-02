@@ -4,7 +4,7 @@ require 'Banco.php';
 require_once '../log/GeraLog.php';
 require_once  '../Validation/ValidaToken.php';
 
-Class TipoVeiculo
+Class FinanceiroSaida
 {
 
       public static function getUsuario(){
@@ -14,6 +14,11 @@ Class TipoVeiculo
         return $permicao;
     }
 
+      public static function getData(){
+        $getData = new GerarData();
+        return $getData ->gerarDataHora();
+    }
+
     public static  function geraLog($argumentos, $erroMysql ){
         $arquivo = __FILE__; //pega o caminho do arquvio.
         $geraLog = new GeraLog();
@@ -21,30 +26,31 @@ Class TipoVeiculo
     }
 
 
-    function get_tpVeiculo($id = 0)
+
+    function get_FinSaida($id = 0)
     {
         try {
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT * FROM tipos_veiculos WHERE status ='ATIVO'";
 
             $response = array();
-            if ($id != 0) {
-                //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query .= " AND pk_tipo = :id LIMIT 1";
-
+            if ($id == 0) {
+                $query = "SELECT * FROM financeiros_entradas WHERE status ='ATIVO' AND statusFinanceiro='PENDENTE'";
+            }
+	    else if ($id == 1) {
+                $query = "SELECT * FROM financeiros_entradas WHERE status ='ATIVO' AND statusFinanceiro='PAGO'";
+            }
+	    else if ($id == 2) {
+                $query = "SELECT * FROM financeiros_entradas WHERE status ='ATIVO' AND statusFinanceiro='CANCELADA'";
             }
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $row = $stmt->fetchAll();
-            //var_dump($row);
-
 
             if ($row == null) {
-                $response = array(
+                 $response = array(
                     'status' => 400,
                     'status_message' => 'Nao foi possivel realizar a pesquisa'
                 );
@@ -70,103 +76,63 @@ Class TipoVeiculo
             self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
 
         }
-        unset($db);
-
 
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    public function insert_tpVeiculo()
+
+    function update_Compra($id)
     {
 
         try {
+
             $db = Banco::conexao();
-
-            $status = 'ATIVO';
-
-            $query = "INSERT INTO tipos_veiculos(nome,status) values (:nome,:status)";
-            $stmt = $db->prepare($query);
-
-            $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
-            $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-
-            $stmt->execute();
-            $pk_tipo = $db->lastInsertId();  
-            $nome = $_POST['nome'];
-
-            $response = array(
-                'status' => 200,
-                'status_message' => 'Tipo de Veiculo adicionado.',
-                'pk_tipo' =>  $pk_tipo,
-                'nome' => $nome
-            );
-            header("HTTP/1.0 200 ");
-
-        } catch (PDOException $e) {
-            $response = array(
-                'status' => 400,
-                'status_message' => $e->getMessage()
-            );
-            header("HTTP/1.0 400 ");
-            self::getUsuario();
-            $argumentos = "Inserido.....";
-            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
-
-        }
-        unset($db);
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    }
-
-    function update_tpVeiculo($id)
-    {
-
-        try {
-            $db = Banco::conexao();
+	$usuario = self::getUsuario();
+	$data = self::getData();
             parse_str(file_get_contents('php://input'), $post_vars);
 
-            $query = "UPDATE tipos_veiculos  SET nome=:nome  WHERE pk_tipo=:id";
+            $query = "UPDATE financeiros_entradas SET statusFinanceiro='PAGO',data_baixa='$data',usuarioUpdate='$usuario',dataUpdate='$data' WHERE pk_entrada=:id";
+
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
 
             $stmt->execute();
             $response = array(
                 'status' => 200,
-                'status_message' => 'Tipo de Veiculo Atualizado com sucesso'
-
+                'status_message' => 'Financeiro Entrada Atualizado'
             );
-            header("HTTP/1.0 200 ");
         } catch (PDOException $e) {
             $response = array(
                 'status' => 400,
                 'status_message' => $e->getMessage()
             );
-            header("HTTPP/1.0 400");
+            header("HTTP/1.0 400");
             self::getUsuario();
-            $argumentos = "Update.....";
+            $argumentos = "Update .....";
             self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
 
 
         }
-        unset($db);
+
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    function delete_tpVeiculo($id)
+
+    function delete_Compra($id)
     {
+
         try {
+
             $db = Banco::conexao();
             $status = 'DESATIVADO';
 
-            $query = "SELECT * FROM tipos_veiculos WHERE status ='ATIVO' AND pk_tipo=:id";
+            $query = "SELECT * FROM compras WHERE status ='ATIVO' AND pk_compra=:id";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $row = $stmt->fetchAll();
-
 
             //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
             if ($row == null) {
@@ -175,33 +141,42 @@ Class TipoVeiculo
                     'status_message' => 'Recurso nao encontrado'
 
                 );
+
                 header("HTTP/1.0 404 ");
             } else {
-                $query = "UPDATE  tipos_veiculos SET status='{$status}' WHERE pk_tipo= :id";
+                $query = "UPDATE  compras SET status='{$status}' WHERE pk_compra= :id";
                 $stmt = $db->prepare($query);
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
 
                 $response = array(
                     'status' => 200,
-                    'status_message' => 'Tipo de Veiculo Excluido com Sucesso'
+                    'status_message' => 'Compra Excluida com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }
+
+
         } catch (PDOException $e) {
             $response = array(
                 'status' => 400,
                 'status_message' => $e->getMessage()
             );
-            header("HTTPP/1.0 400");
+            header("HTTP/1.0 400 ");
             self::getUsuario();
-            $argumentos = "delete.....";
+            $argumentos = "Delete.....";
             self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         unset($db);
         header('Content-Type: application/json');
         echo json_encode($response);
     }
+
 }
+
+
+
+
 

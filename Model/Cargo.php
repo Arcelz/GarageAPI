@@ -1,13 +1,31 @@
 <?php
 
 require 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 
 Class Cargo
 {
+
+    public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+    //private static  $geraLog = new GeraLog();
     function get_cargo($product_id = 0)
     {
         try {
+
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
@@ -29,10 +47,10 @@ Class Cargo
 
             if ($row == null) {
                 $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                    'status' => 400,
+                    'status_message' => 'Nao foi possivel realizar a pesquisa'
                 );
-                header("HTTP/1.0 404 ");
+                header("HTTP/1.0 400 ");
 
             } else {
                 $stmt->execute();
@@ -45,13 +63,15 @@ Class Cargo
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
-        }
-        unset($db);
+            self::getUsuario();
+            $argumentos = "Pesquisando cargos.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
 
+        }          
 
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -59,6 +79,7 @@ Class Cargo
 
     public function insert()
     {
+
 
         try {
             $db = Banco::conexao();
@@ -74,18 +95,22 @@ Class Cargo
 
 
             $response = array(
-                'code' => 200,
-                'message' => 'Cargo adicionado.'
+                'status' => 200,
+                'status_message' => 'Cargo adicionado.'
 
             );
             header("HTTP/1.0 200 ");
 
         } catch (PDOException $e) {
+
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "inserido cargos.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
         }
         unset($db);
         header('Content-Type: application/json');
@@ -106,17 +131,20 @@ Class Cargo
 
             $stmt->execute();
             $response = array(
-                'code' => 200,
-                'message' => 'Cliente Atualizado com sucesso'
+                'status' => 200,
+                'status_message' => 'Cliente Atualizado com sucesso'
 
             );
             header("HTTP/1.0 200 ");
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
-
+            header("HTTP/1.0 400 "); 
+            self::getUsuario();
+            $argumentos = "Atualizando cargos.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs 
         }
         unset($db);
         header('Content-Type: application/json');
@@ -139,8 +167,8 @@ Class Cargo
             //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
             if ($row == null) {
                 $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                    'status' => 404,
+                    'status_message' => 'Recurso nao encontrado'
 
                 );
                 header("HTTP/1.0 404 ");
@@ -151,16 +179,20 @@ Class Cargo
                 $stmt->execute();
 
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Cargo Excluido com Sucesso'
+                    'status' => 200,
+                    'status_message' => 'Cargo Excluido com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
+            header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Deletedando cargos.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
         }
         unset($db);
         header('Content-Type: application/json');

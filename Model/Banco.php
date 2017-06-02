@@ -16,8 +16,8 @@ class Banco
         # Informações sobre o banco de dados:
         $db_host = "localhost";
         $db_nome = "garage";
-        $db_usuario = "root";
-        $db_senha = "kaidoneves94";
+        $db_usuario = "garageAplicacao";
+        $db_senha = "garage12345";
         $db_driver = "mysql";
         # Informações sobre o sistema:
         $sistema_titulo = "GarageAPI";

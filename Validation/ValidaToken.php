@@ -66,4 +66,36 @@ class ValidaToken
             die();
         }
     }
+
+    function usuario(){
+        if (ValidaToken::token_vazio()) {//verifica se o cabeçãlho com a authorization esta vazio
+            $token = ValidaToken::recebe_token();
+            $tokenValido = ValidaToken::valida_token($token);//Verifica se token e valido
+            if ($tokenValido) {
+                $usuario = ValidaToken::busca_usuario($token);// recebe um array de permicoes
+                return $usuario;
+            } else {
+                header('HTTP/1.0 400 Token Invalido');
+                die();
+            }
+
+        }
+        else{
+            header('HTTP/1.0 401 Não Autorizado');
+            die();
+        }
+
+
+    }
+
+    function busca_usuario($token)
+    {
+        $parser = new Parser();
+        $oToken = $parser->parse($token);
+        $usuario = $oToken->getClaim('Nome');
+        return $usuario;
+
+    }
+
+
 }

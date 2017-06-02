@@ -1,9 +1,28 @@
 <?php
 
 require_once 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 class Permissao
 {
+
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+
+
     function insert_permissoes()
     {
         $status = 0;
@@ -19,11 +38,11 @@ class Permissao
                     $stmt->bindParam(':modulo_id', $_POST['modulo_id'], PDO::PARAM_INT);
 
                     $stmt->execute();
-                    $status = 1;
-                    $statusMessage = 'Permissao adicionada com sucesso';
+                    $status = 200;
+                    $status_message= 'Permissao adicionada com sucesso';
                 } catch (PDOException $e) {
-                    $status = 2;
-                    $statusMessage = $e->getMessage();
+                    $status = 400;
+                    $status_message= $e->getMessage();
                 }
 
         $response = array(
@@ -45,12 +64,12 @@ class Permissao
             $stmt = $db->prepare($query);
             $stmt->bindParam(':pk_permissao', $pk_permissao, PDO::PARAM_INT);
             $stmt->execute();
-            while ($row = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $response[] = $row;
             }
         } catch (PDOException $e) {
             $response = array(
-                'status' => 0,
+                'status' => 400,
                 'status_message' => $e->getMessage()
             );
         }
@@ -68,19 +87,19 @@ class Permissao
             $stmt->execute();
             if ($stmt->rowCount() != 0) {
                 $response = array(
-                    'status' => 0,
+                    'status' => 400,
                     'status_message' => 'Falha ao deletar permissão não encontrada.'
                 );
             } else {
                 $response = array(
-                    'status' => 1,
+                    'status' => 200,
                     'status_message' => 'Permissão deletada com sucesso.'
                 );
             }
         } catch
         (PDOException $e) {
             $response = array(
-                'status' => 0,
+                'status' => 400,
                 'status_message' => $e->getMessage()
             );
 
@@ -110,17 +129,17 @@ class Permissao
                         $stmt->bindParam(':modulo_id', $post_vars['modulo_id'], PDO::PARAM_INT);
                         $stmt->bindParam(':pk_permissao', $pk_permissao, PDO::PARAM_INT);
                         $stmt->execute();
-                        $status = 1;
-                        $statusMessage = 'Permissão alterada com sucesso.';
+                        $status = 200;
+                        $status_message= 'Permissão alterada com sucesso.';
 
                     } else {
-                        $status = 0;
-                        $statusMessage = 'Permissão nao encontrada.';
+                        $status = 400;
+                        $status_message= 'Permissão nao encontrada.';
                     }
                 } catch
                 (PDOException $e) {
-                    $status = 2;
-                    $statusMessage = $e->getMessage();
+                    $status = 400;
+                    $status_message= $e->getMessage();
 
                 }
 

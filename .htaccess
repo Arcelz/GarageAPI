@@ -35,12 +35,24 @@ RewriteRule ^marcas/([0-9]+)/?$ Controller/MarcaController.php?marca_id=$1 [NC,L
 
 RewriteRule ^veiculos/?$ Controller/VeiculoController.php [NC,L]
 RewriteRule ^veiculos/([0-9]+)/?$ Controller/VeiculoController.php?veiculo_id=$1 [NC,L]
+RewriteRule ^veiculos/([a-zA-Z0-9_-]+)/$ Controller/VeiculoController.php?consulta=$1 [NC,L]
+
 
 RewriteRule ^vendas/?$ Controller/VendaController.php [NC,L]
 RewriteRule ^vendas/([0-9]+)/?$ Controller/VendaController.php?venda_id=$1 [NC,L]
 
 RewriteRule ^compras/?$ Controller/CompraController.php [NC,L]
 RewriteRule ^compras/([0-9]+)/?$ Controller/CompraController.php?compra_id=$1 [NC,L]
+
+RewriteRule ^permissoes/?$ Controller/PermissaoController.php [NC,L]
+RewriteRule ^permissoes/([0-9]+)/?$ Controller/PermissaoController.php?permissao_id=$1 [NC,L]
+
+RewriteRule ^grupos/?$ Controller/GrupoController.php [NC,L]
+RewriteRule ^grupos/([0-9]+)/?$ Controller/GrupoController.php?grupo_id=$1 [NC,L]
+
+RewriteRule ^grupos-permissao/?$ Controller/GrupoPermissaoController.php [NC,L]
+RewriteRule ^grupos-permissao/([0-9]+)/?$ Controller/GrupoPermissaoController.php?grupo_id=$1 [NC,L]
+
 
 RewriteRule ^financeiros-saidas/?$ Controller/FinanceiroSaidaController.php [NC,L]
 RewriteRule ^financeiros-saidas/([0-9]+)/?$ Controller/FinanceiroSaidaController.php?saida_id=$1 [NC,L]

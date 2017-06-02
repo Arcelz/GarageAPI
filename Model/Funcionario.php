@@ -1,9 +1,26 @@
 <?php
 
 require 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 Class Funcionario
 {
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+
 
     function get_Funcionario($id = 0)
     {
@@ -11,12 +28,12 @@ Class Funcionario
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT * FROM funcionarios WHERE status ='ATIVO'";
+            $query = "SELECT f.pk_funcionario,f.fk_cargo,f.nome as nomes,f.cpf,f.email,f.contato1,f.contato,f.status,c.pk_cargos,c.nome,c.status FROM funcionarios as f LEFT JOIN cargos as c ON f.fk_cargo = c.pk_cargos WHERE f.status ='ATIVO' AND f.pk_funcionario > 1";
 
             $response = array();
             if ($id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query .= " AND pk_funcionario = :id LIMIT 1";
+                $query = " Select f.nome AS nomes, f.*,fe.*,c.* FROM funcionarios AS f LEFT JOIN funcionarios_enderecos AS fe ON f.pk_funcionario = fe.fk_funcionario LEFT JOIN cargos as c ON f.fk_cargo = c.pk_cargos WHERE f.status = 'ATIVO' AND f.pk_funcionario > 1 AND f.pk_funcionario = :id LIMIT 1";
 
             }
 
@@ -28,13 +45,14 @@ Class Funcionario
 
             if ($row == null) {
                 $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                    'status' => 400,
+                    'status_message' => 'Nao foi possivel realizar a pesquisa'
                 );
-                header("HTTP/1.0 404 ");
+                header("HTTP/1.0 400 ");
 
             } else {
                 $stmt->execute();
+                
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     //$response[]= $row;
                     array_push($response, $row);
@@ -44,10 +62,14 @@ Class Funcionario
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Pesquisando .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         unset($db);
         header('Content-Type: application/json');
@@ -92,18 +114,22 @@ Class Funcionario
                 $stmt->execute();
 
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Funcionario adicionado.'
+                    'status' => 200,
+                    'status_message' => 'Funcionario adicionado.'
                 );
                 header("HTTP/1.0 200 ");
             }
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Inserido.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         unset($db);
@@ -117,17 +143,18 @@ Class Funcionario
         try {
 
             $db = Banco::conexao();
-
+		
             parse_str(file_get_contents('php://input'), $post_vars);
 
             /// UPDATE funcionarios AS f LEFT JOIN funcionarios_enderecos as fe ON f.pk_funcionario = fe.fk_funcionario SET f.nome = nome
             //WHERE f.pk_funcionario = ??
             $query = "UPDATE funcionarios AS f  JOIN funcionarios_enderecos AS fe ON f.pk_funcionario = fe.fk_funcionario
-          SET f.nome=:nome,f.cpf=:cpf,f.email=:email,f.contato1=:contato1,fe.logradouro=:logradouro,fe.bairro=:bairro,fe.cidade=:cidade,
+          SET f.nome=:nome,f.cpf=:cpf, f.fk_cargo=:fkCargo,f.email=:email,f.contato1=:contato1,fe.logradouro=:logradouro,fe.bairro=:bairro,fe.cidade=:cidade,
             fe.estado=:estado,fe.pais=:pais,fe.cep=:cep,f.contato=:contato  WHERE f.pk_funcionario= :id";
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $post_vars['pk_funcionario'], PDO::PARAM_INT);
+             $stmt->bindParam(':fkCargo', $post_vars['fkCargo'], PDO::PARAM_INT);
             $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
             $stmt->bindParam(':cpf', $post_vars['cpf'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $post_vars['email'], PDO::PARAM_STR);
@@ -139,21 +166,27 @@ Class Funcionario
             $stmt->bindParam(':cidade', $post_vars['cidade'], PDO::PARAM_STR);
             $stmt->bindParam(':pais', $post_vars['pais'], PDO::PARAM_STR);
             $stmt->bindParam(':cep', $post_vars['cep'], PDO::PARAM_STR);
-
+		
             $stmt->execute();
-            $response = array(
-                'code' => 200,
-                'message' => 'Funcionario Atualizado com sucesso'
-            );
+	     unset($db);
+		$response = array(			
+                'status' => 200,
+                'status_message' => 'Funcionario Atualizado com sucesso'
+		);
+             header("HTTP/1.0 200 ");
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "update .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
-        unset($db);
+        
         header('Content-Type: application/json');
         echo json_encode($response);
     }
@@ -175,8 +208,8 @@ Class Funcionario
             //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
             if ($row == null) {
                 $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                    'status' => 404,
+                    'status_message' => 'Recurso nao encontrado'
 
                 );
 
@@ -188,8 +221,8 @@ Class Funcionario
                 $stmt->execute();
 
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Funcionario Excluido com Sucesso'
+                    'status' => 200,
+                    'status_message' => 'Funcionario Excluido com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }
@@ -197,15 +230,19 @@ Class Funcionario
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "delete .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         unset($db);
         header('Content-Type: application/json');
-        echo json_encode($response);
+        //echo json_encode($response);
     }
 }
 

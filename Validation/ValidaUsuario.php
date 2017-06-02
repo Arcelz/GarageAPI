@@ -14,7 +14,7 @@ class ValidaUsuario
     function valida_permicao($login)// função para trazer as permições do usuario no sistema.
     {
         $db = Banco::conexao();
-        $query = "SELECT GROUP_CONCAT(p.permissao) as permissoes,GROUP_CONCAT(p.fk_modulo) as modulo FROM usuarios AS u JOIN usuarios_grupos as ug ON u.usuario_id=ug.usuario_id JOIN grupos AS g ON g.pk_grupo=ug.grupo_id JOIN grupos_permissoes AS gp ON gp.grupo_id= g.pk_grupo JOIN permissoes as p ON p.pk_permissao = gp.permissao_id where u.login = :login";
+        $query = "SELECT GROUP_CONCAT(p.permissao) as permissoes,GROUP_CONCAT(p.fk_modulo) as modulo FROM usuarios AS u JOIN usuarios_grupos as ug ON u.usuario_id=ug.usuario_id JOIN grupos AS g ON g.pk_grupo=ug.grupo_id JOIN grupos_permissoes AS gp ON gp.grupo_id= g.pk_grupo JOIN permissoes as p ON p.pk_permissao = gp.permissao_id where u.status='ATIVO' AND u.login = :login";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
         $stmt->execute();

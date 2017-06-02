@@ -1,9 +1,27 @@
 <?php
 
 require 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 Class Marca
 {
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+
+
     function get_Marca($id = 0)
     {
         try {
@@ -27,11 +45,11 @@ Class Marca
 
 
             if ($row == null) {
-                $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                 $response = array(
+                    'status' => 400,
+                    'status_message' => 'Nao foi possivel realizar a pesquisa'
                 );
-                header("HTTP/1.0 404 ");
+                header("HTTP/1.0 400 ");
 
             } else {
                 $stmt->execute();
@@ -44,10 +62,14 @@ Class Marca
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Pesquisando .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         unset($db);
 
@@ -64,27 +86,35 @@ Class Marca
 
             $status = 'ATIVO';
 
-            $query = "INSERT INTO marcas(nome,status,fk_modelo) values (:nome,:status,:fk)";
+            $query = "INSERT INTO marcas(nome,status) values (:nome,:status)";
             $stmt = $db->prepare($query);
 
-            $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
-            $stmt->bindParam(':fk', $_POST['fk'], PDO::PARAM_STR);//fkModelo
+            $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);            
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
 
             $stmt->execute();
+            
+            $pk_marca = $db->lastInsertId();  
+            $nome = $_POST['nome'];
 
             $response = array(
-                'code' => 200,
-                'message' => 'Marca adicionado.'
+                'status' => 200,
+                'status_message' => 'Marca adicionado.',
+                'pk_marca' =>  $pk_marca,
+                'nome' => $nome
             );
             header("HTTP/1.0 200 ");
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Iserindo.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         unset($db);
         header('Content-Type: application/json');
@@ -105,16 +135,20 @@ Class Marca
 
             $stmt->execute();
             $response = array(
-                'code' => 200,
-                'message' => 'Marca Atualizado com sucesso'
+                'status' => 200,
+                'status_message' => 'Marca Atualizado com sucesso'
 
             );
             header("HTTP/1.0 200 ");
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
+            self::getUsuario();
+            $argumentos = "Update .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         unset($db);
@@ -138,8 +172,8 @@ Class Marca
             //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
             if ($row == null) {
                 $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                    'status' => 404,
+                    'status_message' => 'Recurso nao encontrado'
 
                 );
                 header("HTTP/1.0 404 ");
@@ -150,16 +184,20 @@ Class Marca
                 $stmt->execute();
 
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Marca Excluido com Sucesso'
+                    'status' => 200,
+                    'status_message' => 'Marca Excluido com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
+            self::getUsuario();
+            $argumentos = "delete .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         unset($db);
         header('Content-Type: application/json');

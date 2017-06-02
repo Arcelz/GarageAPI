@@ -1,9 +1,31 @@
 <?php
 
 require 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 Class FinanceiroSaida
 {
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+      public static function getData(){
+        $getData = new GerarData();
+        return $getData ->gerarDataHora();
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+
 
     function get_FinSaida($id = 0)
     {
@@ -11,26 +33,28 @@ Class FinanceiroSaida
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT * FROM financeiros_saidas WHERE status ='ATIVO'";
 
             $response = array();
-            if ($id != 0) {
-                //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query .= " AND pk_saida = :id LIMIT 1";
-
+            if ($id == 0) {
+                $query = "SELECT * FROM financeiros_saidas WHERE status ='ATIVO' AND statusFinanceiro='PENDENTE'";
+            }
+	    else if ($id == 1) {
+                $query = "SELECT * FROM financeiros_saidas WHERE status ='ATIVO' AND statusFinanceiro='PAGO'";
+            }
+	    else if ($id == 2) {
+                $query = "SELECT * FROM financeiros_saidas WHERE status ='ATIVO' AND statusFinanceiro='CANCELADA'";
             }
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $row = $stmt->fetchAll();
 
             if ($row == null) {
-                $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                 $response = array(
+                    'status' => 400,
+                    'status_message' => 'Nao foi possivel realizar a pesquisa'
                 );
-                header("HTTP/1.0 404 ");
+                header("HTTP/1.0 400 ");
 
             } else {
                 $stmt->execute();
@@ -43,68 +67,20 @@ Class FinanceiroSaida
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Pesquisando .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
 
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-
-    public function insert_FinSaida()
-    {
-
-        try {
-            $db = Banco::conexao();
-            $status = 'ATIVO';
-
-
-            $dataEmissao = $_POST['$dataEmissao'];
-            $parcela = $_POST['parcela'];
-            $valor = $_POST['valor'];
-            $divisao = $valor / $parcela;
-
-
-            parse_str(file_get_contents('php://input'), $post_vars);
-            for ($i = 0; $i < $parcela; $i++) {
-
-                $query = "INSERT INTO financeiros_saidas(fk_compra,data_emissao,data_vencimento,data_baixa,valor,status) values 
-                (:fkCompra,:dataEmissao,:dataVencimento,:dataBaixa,:valor,:status)";
-                $stmt = $db->prepare($query);
-
-                $stmt->bindParam(':fkCompra', $_POST['fkCompra'], PDO::PARAM_INT);
-                $stmt->bindParam(':dataEmissao', $_POST['dataEmissao'], PDO::PARAM_STR);
-                $stmt->bindParam(':dataVencimento', $post_vars['vencimento' . $i], PDO::PARAM_STR);
-                $stmt->bindParam(':dataBaixa', $_POST['dataBaixa'], PDO::PARAM_STR);
-                $stmt->bindParam(':valor', $divisao, PDO::PARAM_STR);
-                $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-                $stmt->execute();
-                //$vencimento = $post_vars['vencimento'.$i];
-                //var_dump($vencimento);
-            }
-
-            $response = array(
-                'code' => 200,
-                'message' => 'Sou foda'
-            );
-            header("HTTP/1.0 200 ");
-
-            // ======== =========== ==========================
-        } catch (PDOException $e) {
-            $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
-            );
-            header("HTTP/1.0 400 ");
-
-        }
-
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    }
 
     function update_Compra($id)
     {
@@ -112,37 +88,30 @@ Class FinanceiroSaida
         try {
 
             $db = Banco::conexao();
-
+	$usuario = self::getUsuario();
+	$data = self::getData();
             parse_str(file_get_contents('php://input'), $post_vars);
 
-            /// UPDATE funcionarios AS f LEFT JOIN funcionarios_enderecos as fe ON f.pk_funcionario = fe.fk_funcionario SET f.nome = nome
-            //WHERE f.pk_funcionario = ??
-            $query = "UPDATE compras AS co LEFT JOIN compras_itens AS ci ON co.pk_compra = ci.fk_compra
-			SET co.fk_fornecedor = :fkFornecedor, co.fk_funcionario = :fkFuncionario, co.datas = :datas, ci.fk_veiculo = :fkVeiculo, ci.valor_compra =:valorCompra
-			WHERE co.pk_compra=:id";
+            $query = "UPDATE financeiros_saidas SET statusFinanceiro='PAGO',data_baixa='$data',usuarioUpdate='$usuario',dataUpdade='$data' WHERE pk_saida=:id";
 
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':fkFornecedor', $post_vars['fkFornecedor'], PDO::PARAM_INT);
-            $stmt->bindParam(':fkFuncionario', $post_vars['fkFuncionario'], PDO::PARAM_INT);
-            $stmt->bindParam(':datas', $post_vars['datas'], PDO::PARAM_STR);
-            $stmt->bindParam(':fkVeiculo', $post_vars['fkVeiculo'], PDO::PARAM_STR);
-            $stmt->bindParam(':valorCompra', $post_vars['valorCompra'], PDO::PARAM_STR);
-
 
             $stmt->execute();
             $response = array(
-                'code' => 200,
-                'message' => 'Cliente Atualizado com sucesso'
-
-
+                'status' => 200,
+                'status_message' => 'Financeiro Entrada Atualizado'
             );
-            header("HTTP/1.0 400 ");
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
+            header("HTTP/1.0 400");
+            self::getUsuario();
+            $argumentos = "Update .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
 
@@ -151,56 +120,7 @@ Class FinanceiroSaida
     }
 
 
-    function delete_Compra($id)
-    {
-
-        try {
-
-            $db = Banco::conexao();
-            $status = 'DESATIVADO';
-
-            $query = "SELECT * FROM compras WHERE status ='ATIVO' AND pk_compra=:id";
-            $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $row = $stmt->fetchAll();
-
-            //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
-            if ($row == null) {
-                $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
-
-                );
-
-                header("HTTP/1.0 404 ");
-            } else {
-                $query = "UPDATE  compras SET status='{$status}' WHERE pk_compra= :id";
-                $stmt = $db->prepare($query);
-                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $response = array(
-                    'code' => 200,
-                    'message' => 'Compra Excluida com Sucesso'
-                );
-                header("HTTP/1.0 200 ");
-            }
-
-
-        } catch (PDOException $e) {
-            $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
-            );
-            header("HTTP/1.0 400 ");
-
-        }
-        unset($db);
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    }
-
+   
 }
 
 

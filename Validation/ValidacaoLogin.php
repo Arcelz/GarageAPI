@@ -12,7 +12,7 @@ class ValidacaoLogin
     function verifica_login($login, $senha)
     {
         $db = Banco::conexao();
-        $query="SELECT * FROM usuarios WHERE login=:login";
+        $query="SELECT * FROM usuarios WHERE status='ATIVO' and login=:login";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':login', $_POST['login'], PDO::PARAM_STR);
         $stmt->execute();

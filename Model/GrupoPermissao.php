@@ -1,32 +1,54 @@
 <?php
 
 require_once 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 class GrupoPermissao
 {
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+
     function insert_grupos()
     {
         $status = 0;
-        $statusMessage = '';
+        $status_message = '';
+        $array = $_POST['permissao_id'];
                 try {
                     $db = Banco::conexao();
+                    $query = "DELETE FROM grupos_permissoes WHERE grupo_id = :grupo_id";
+                    $stmt = $db->prepare($query);
+                    $stmt->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_STR);
+                    $stmt->execute();
+		 for ($i=0;$i<count($array);$i++){
                     $query = "INSERT INTO grupos_permissoes (grupo_id,permissao_id) VALUES (:grupo_id,:permissao_id)";
                     $stmt = $db->prepare($query);
-
                     $stmt->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_STR);
-                    $stmt->bindParam(':permissao_id', $_POST['permissao_id'], PDO::PARAM_STR);
-
+                    $stmt->bindParam(':permissao_id', $array[$i], PDO::PARAM_STR);
                     $stmt->execute();
-                    $status = 1;
-                    $statusMessage = 'Grupo de permissão adicionado com sucesso';
+		}
+                    $status = 200;
+                    $status_message = 'Grupo de permissão adicionado com sucesso';
                 } catch (PDOException $e) {
-                    $status = 2;
-                    $statusMessage = $e->getMessage();
+                    $status = 400;
+                    $status_message = $e->getMessage();
                 }
 
         $response = array(
             'status' => $status,
-            'status_message' => $statusMessage
+            'status_message' => $status_message
         );
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -48,9 +70,13 @@ class GrupoPermissao
             }
         } catch (PDOException $e) {
             $response = array(
-                'status' => 0,
+                'status' => 400,
                 'status_message' => $e->getMessage()
             );
+            self::getUsuario();
+            $argumentos = "Pesquisando .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -66,21 +92,25 @@ class GrupoPermissao
             $stmt->execute();
             if ($stmt->rowCount() != 0) {
                 $response = array(
-                    'status' => 0,
+                    'status' => 400,
                     'status_message' => 'Falha ao deletar grupo não encontrado.'
                 );
             } else {
                 $response = array(
-                    'status' => 1,
+                    'status' => 200,
                     'status_message' => 'Grupo deletado com sucesso.'
                 );
             }
         } catch
         (PDOException $e) {
             $response = array(
-                'status' => 0,
+                'status' => 400,
                 'status_message' => $e->getMessage()
             );
+            self::getUsuario();
+            $argumentos = "Delete .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         header('Content-Type: application/json');
@@ -108,17 +138,21 @@ class GrupoPermissao
                         $stmt->bindParam(':permissao_old_id', $post_vars['permissao_old_id'], PDO::PARAM_INT);
                         $stmt->bindParam(':grupo_id', $grupo_id, PDO::PARAM_INT);
                         $stmt->execute();
-                        $status = 1;
+                        $status = 200;
                         $statusMessage = 'Grupo Permissao alterado com sucesso.';
 
                     } else {
-                        $status = 0;
-                        $statusMessage = 'Grupo Permissao nao encontrado.';
+                        $status = 400;
+                        $status_message = 'Grupo Permissao nao encontrado.';
                     }
                 } catch
                 (PDOException $e) {
-                    $status = 2;
-                    $statusMessage = $e->getMessage();
+                    $status = 400;
+                    $status_message = $e->getMessage();
+
+                    self::getUsuario();
+            $argumentos = "delete .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
 
                 }
 

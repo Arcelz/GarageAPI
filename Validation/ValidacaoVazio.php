@@ -10,13 +10,13 @@ function verificaNome()
         $response = array();
 
         if($post_vars !=null){
-            if(empty($nome) || !preg_match("/^[a-zA-Z√°√†√¢√£√©√®√™√≠√Ø√≥√¥√µ√∂√∫√ß√± ]+$/",$nome)){
+            if(empty($nome) || !preg_match("/^[a-zA-Z·‡‚„ÈËÍÌÔÛÙıˆ˙ÁÒ ]+$/",$nome)){
                 //return  100;//Preencha some com letras
                 //echo $post_vars;
-                $response["code"]="400";
+                $response["status"]="400";
 
-                $response["message"]="Preencha some com letras";
-                header("HTTP/1.0 400.005");
+                $response["status_message"]="Preencha some com letras";
+                header("HTTP/1.0 400");
                 return $response;
             }else{
                 return 1;//tudo ok
@@ -25,9 +25,9 @@ function verificaNome()
 
         }
         else{
-             $response["code"]="400";
-            $response["message"]="Campo n√£o pode ser vazio";
-            header("HTTP/1.0 400.005");
+             $response["status"]="400";
+            $response["status_message"]="Campo n„o pode ser vazio";
+            header("HTTP/1.0 400");
             return $response;
         }
 
@@ -45,9 +45,9 @@ function verificaNome()
             if(empty($fk) || !preg_match("/^[0-9]+$/",$fk)){
                 //return  100;//Preencha some com letras
                 //echo $post_vars;
-                $response["code"]="400";
-                $response["message"]="Preencha some com numero a chave estrangeira";
-                header("HTTP/1.0 400.005");
+                $response["status"]="400";
+                $response["status_message"]="Preencha some com numero a chave estrangeira";
+                header("HTTP/1.0 400");
                 return $response;
             }else{
                 return 1;//tudo ok
@@ -55,9 +55,9 @@ function verificaNome()
 
         }
         else{
-            $response["code"]="400";
-            $response["message"]="Campo n√£o pode ser vazio";
-            header("HTTP/1.0 400.005");
+            $response["status"]="400";
+            $response["status_message"]="Campo n„o pode ser vazio";
+            header("HTTP/1.0 400");
             return $response;
         }
 
@@ -78,32 +78,29 @@ function verificaNome()
 
                // echo $email;
 
-                 if(empty($nome) || !preg_match("/^[a-zA-Z√°√†√¢√£√©√®√™√≠√Ø√≥√¥√µ√∂√∫√ß√± ]+$/",$nome)){
+                 if(empty($nome) || !preg_match("/^[a-zA-Z·‡‚„ÈËÍÌÔÛÙıˆ˙ÁÒ ]+$/",$nome)){
                     //return  100;//Preencha some com letras
                     //echo $post_vars;
-                    $response["code"]="400";
-                    $response["nome"]="Preencha some com letras";
+                    $response["status"]="400";
+                    $response["status_message"]="Preencha some com letras";
                     header("HTTP/1.0 400");
 
                 } else if(empty($cpf) || !preg_match("/^(([0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2})|([0-9]{11}))$/ ", $cpf)){
                     //return 101;//CPF invalido
-                    $response["code"]="400";
-                    $response["cpf"]="CPF invalido";
+                    $response["status"]="400";
+                    $response["status_message"]="CPF invalido";
 
                 }else if(empty($email) || !preg_match('/^([\w\-]+\.)*[\w\- ]+@([\w\- ]+\.)+([\w\-]{2,3})$/', $email)){
-                    $response["code"]="400";
-                    $response["email"]="EMAIL invalido";
+                    $response["status"]="400";
+                    $response["status_message"]="EMAIL invalido";
 
                 } else if (empty($contato) || !preg_match('/^\(?\d{2}\){0,1} ?9?\d{4}\-?\d{4}$/',$contato)){
-                    $response["code"]="103";
-                    $response["contato"]="Telefone invalido";
+                    $response["status"]="400";
+                    $response["status_message"]="Telefone invalido";
                 } else if(empty($contato1) || !preg_match('/^\(?\d{2}\){0,1} ?9?\d{4}\-?\d{4}$/',$contato1)){
-                    $response["code"]="103";
-                    $response["contato1"]="Celular invalido";
+                    $response["status"]="400";
+                    $response["status_message"]="Celular invalido";
 
-                }else if(empty($cep) || !preg_match('/\d{5}-\d{3}/',$cep)){
-                    $response["code"]="104";
-                    $response["cep"]="CEP invalido";
                 }
                 else{
 
@@ -113,8 +110,8 @@ function verificaNome()
                 return $response;
 
         }else{
-                $response["code"]="400";
-                $response["message"]="Preencha os campos obrigatorios";
+                $response["status"]="400";
+                $response["status_message"]="Preencha os campos obrigatorios";
                 return $response;
 
         }

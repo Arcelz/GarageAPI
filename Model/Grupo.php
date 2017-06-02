@@ -1,13 +1,30 @@
 <?php
 
 require_once 'Banco.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 class Grupo
 {
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
+
     function insert_grupos()
     {
         $status = 0;
-        $statusMessage = '';
+        $status_message = '';
                 try {
                     $db = Banco::conexao();
                     $query = "INSERT INTO grupos (nome,descricao) VALUES (:nome,:descricao)";
@@ -17,16 +34,16 @@ class Grupo
                     $stmt->bindParam(':descricao', $_POST['descricao'], PDO::PARAM_STR);
 
                     $stmt->execute();
-                    $status = 1;
-                    $statusMessage = 'Grupo adicionado com sucesso';
+                    $status = 200;
+                    $status_message = 'Grupo adicionado com sucesso';
                 } catch (PDOException $e) {
-                    $status = 2;
-                    $statusMessage = $e->getMessage();
+                    $status = 400;
+                    $status_message = $e->getMessage();
                 }
 
         $response = array(
             'status' => $status,
-            'status_message' => $statusMessage
+            'status_message' => $status_message
         );
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -43,14 +60,19 @@ class Grupo
             $stmt = $db->prepare($query);
             $stmt->bindParam(':pk_grupo', $pk_grupo, PDO::PARAM_INT);
             $stmt->execute();
-            while ($row = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $response[] = $row;
             }
         } catch (PDOException $e) {
             $response = array(
-                'status' => 0,
+                'status' => 400,
                 'status_message' => $e->getMessage()
             );
+
+            self::getUsuario();
+            $argumentos = "Pesquisando .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -64,23 +86,27 @@ class Grupo
             $stmt = $db->prepare($query);
             $stmt->bindParam(':pk_grupo', $pk_grupo, PDO::PARAM_INT);
             $stmt->execute();
-            if ($stmt->rowCount() != 0) {
+            if ($stmt->rowCount() == 0) {
                 $response = array(
-                    'status' => 0,
+                    'status' => 400,
                     'status_message' => 'Falha ao deletar grupo não encontrado.'
                 );
             } else {
                 $response = array(
-                    'status' => 1,
+                    'status' => 200,
                     'status_message' => 'Grupo deletado com sucesso.'
                 );
             }
         } catch
         (PDOException $e) {
             $response = array(
-                'status' => 0,
+                'status' => 400,
                 'status_message' => $e->getMessage()
             );
+            self::getUsuario();
+            $argumentos = "Delete.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         header('Content-Type: application/json');
@@ -91,7 +117,7 @@ class Grupo
     function update_grupo($pk_grupo)
     {
         $status = 0;
-        $statusMessage = '';
+        $status_message = '';
                 try {
                     $db = Banco::conexao();
 
@@ -107,24 +133,28 @@ class Grupo
                         $stmt->bindParam(':descricao', $post_vars['descricao'], PDO::PARAM_STR);
                         $stmt->bindParam(':pk_grupo', $pk_grupo, PDO::PARAM_STR);
                         $stmt->execute();
-                        $status = 1;
-                        $statusMessage = 'Grupo alterado com sucesso.';
+                        $status = 200;
+                        $status_message = 'Grupo alterado com sucesso.';
 
                     } else {
-                        $status = 0;
-                        $statusMessage = 'Grupo nao encontrado.';
+                        $status = 400;
+                        $status_message = 'Grupo nao encontrado.';
                     }
                 } catch
                 (PDOException $e) {
-                    $status = 2;
-                    $statusMessage = $e->getMessage();
+                    $status = 400;
+                    $status_message = $e->getMessage();
+
+                    self::getUsuario();
+                     $argumentos = "update .....";
+                 self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
 
                 }
 
 
         $response = array(
             'status' => $status,
-            'status_message' => $statusMessage
+            'status_message' => $status_message
         );
         header('Content-Type: application/json');
         echo json_encode($response);

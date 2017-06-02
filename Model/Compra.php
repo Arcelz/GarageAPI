@@ -1,9 +1,30 @@
 <?php
 
 require 'Banco.php';
+require_once '../Validation/GerarData.php';
+require_once '../log/GeraLog.php';
+require_once  '../Validation/ValidaToken.php';
 
 Class Compra
 {
+    public static function getData(){
+        $getData = new GerarData();
+        return $getData ->gerarDataHora();
+    }
+
+      public static function getUsuario(){
+        $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $permicao = $getUsuario->usuario();
+        //var_dump($permicao) ;
+        return $permicao;
+    }
+
+    public static  function geraLog($argumentos, $erroMysql ){
+        $arquivo = __FILE__; //pega o caminho do arquvio.
+        $geraLog = new GeraLog();
+        $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
+    }
+
 
     function get_Comra($id = 0)
     {
@@ -11,7 +32,7 @@ Class Compra
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT * FROM compras WHERE status ='ATIVO'";
+            $query = "SELECT c.pk_compra, fo.nome AS nomeFornecedor, f.nome as nomeFuncionario, c.datas, c.numero, c.statusCompra, ci.valor_compra FROM compras AS c LEFT JOIN fornecedores AS fo ON c.fk_fornecedor = fo.pk_fornecedor LEFT JOIN funcionarios AS f ON c.fk_funcionario = f.pk_funcionario LEFT JOIN compras_itens AS ci ON c.pk_compra = ci.fk_compra WHERE c.status = 'ATIVO'";
 
             $response = array();
             if ($id != 0) {
@@ -26,11 +47,11 @@ Class Compra
             $row = $stmt->fetchAll();
 
             if ($row == null) {
-                $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                 $response = array(
+                    'status' => 400,
+                    'status_message' => 'Nao foi possivel realizar a pesquisa'
                 );
-                header("HTTP/1.0 404 ");
+                header("HTTP/1.0 400 ");
 
             } else {
                 $stmt->execute();
@@ -43,10 +64,14 @@ Class Compra
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Pesquisando compra.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
         }
 
         header('Content-Type: application/json');
@@ -56,13 +81,19 @@ Class Compra
 
     public function insert_Compra()
     {
+	  $db = Banco::conexao();
+         $db->beginTransaction();
 
         try {
-            $db = Banco::conexao();
+           
             $status = 'ATIVO';
+            $statusCompra = "EFETUADA";
 
-            //Este bloco é responsavel por retornar o ultimo registro de venda realizado.
-            //Usamos este metado para mostrar organizado a quantidade de venda realizada. Para não ter que usar o id.
+
+            $datas = self::getData();
+            $dataCriacao = self::getData();
+            //Este bloco � responsavel por retornar o ultimo registro de venda realizado.
+            //Usamos este metado para mostrar organizado a quantidade de venda realizada. Para n�o ter que usar o id.
             $queryCont = "SELECT pk_compra,numero FROM compras ORDER BY pk_compra DESC LIMIT 1 ";
             $stmt = $db->prepare($queryCont);
             $stmt->execute();
@@ -71,21 +102,24 @@ Class Compra
             $numero = $returnNumero['numero'] + 1;
             // ======== =========== ==========================
 
-            $query = "INSERT INTO compras(fk_fornecedor,fk_funcionario,datas,valor_compra,status,numero) values 
-                (:fkFornecedor, :fkFuncionario,:datas,:valorCompra,:status,:numero )";
+            $query = "INSERT INTO compras(fk_fornecedor,fk_funcionario,datas,status,numero, statusCompra, dataCriacao, usuarioInsert) values 
+                (:fkFornecedor, :fkFuncionario,:datas,:status,:numero, :statusCompra, :dataCriacao, :usuario )";
             $stmt = $db->prepare($query);
 
             $stmt->bindParam(':fkFornecedor', $_POST['fkFornecedor'], PDO::PARAM_INT);
             $stmt->bindParam(':fkFuncionario', $_POST['fkFuncionario'], PDO::PARAM_INT);
-            $stmt->bindParam(':datas', $_POST['data'], PDO::PARAM_STR);
-            $stmt->bindParam(':valorCompra', $_POST['valorCompra'], PDO::PARAM_STR);
+            $stmt->bindParam(':datas',  $datas, PDO::PARAM_STR);          
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+            $stmt->bindParam(':statusCompra', $statusCompra, PDO::PARAM_STR);
             $stmt->bindParam(':numero', $numero, PDO::PARAM_INT);
+            $stmt->bindParam(':dataCriacao', $dataCriacao, PDO::PARAM_STR);
+             $stmt->bindParam(':usuario', self::getUsuario(), PDO::PARAM_STR);
             $stmt->execute();
 
-
-            //Este bloco é responsavel pela inserção das vendas itens. usamos a variavel $returnn para verificar se
+            
+            //Este bloco � responsavel pela inser��o das vendas itens. usamos a variavel $returnn para verificar se
             // foi inserido a venda corretamente. Caso sim cai no IF e salva a vendas_itens
+            
             $returnn = $stmt->rowCount();
 
             if ($returnn > 0) {
@@ -95,26 +129,54 @@ Class Compra
                 $query2 = "INSERT INTO compras_itens(fk_compra,fk_veiculo,valor_compra) 
                     values (:fkCompra,:fkVeiculo,:valorCompra)";
                 $stmt = $db->prepare($query2);
-
+                
                 $stmt->bindParam(':fkCompra', $fk_compra, PDO::PARAM_INT);
                 $stmt->bindParam(':fkVeiculo', $_POST['fkVeiculo'], PDO::PARAM_INT);
-                $stmt->bindParam(':valorCompra', $_POST['valorCompra'], PDO::PARAM_STR);
-
+                $stmt->bindParam(':valorCompra', $_POST['valorCompra'], PDO::PARAM_INT);
+                
                 $stmt->execute();
+                
+                 $returnComprasItens = $stmt->rowCount();
 
+                 if($returnComprasItens >0){
+                    $statusFinanceiro = "PENDENTE";
+                    $usuario = self::getUsuario();
+                    $parcela = $_POST['parcela'];
+                    //$valor = $_POST['valorTotal'];
+
+                    parse_str(file_get_contents('php://input'), $post_vars);
+                    for($i = 0; $i<$parcela; $i++){
+                          $query3 = "INSERT INTO financeiros_entradas(fk_compra, data_emissao, data_vencimento,valor,status,statusFinanceiro, usuarioCriacao, dataCriacao) values (
+                          '$fk_compra','$datas',:dataVencimento,:valor,'$status','$statusFinanceiro','$usuario','$datas')";
+                          $stmt = $db->prepare($query3);
+
+                           $stmt->bindParam(':valor', $_POST['valorTotal'], PDO::PARAM_INT);
+                           $stmt->bindParam(':dataVencimento', $post_vars['vencimento' . $i], PDO::PARAM_STR);             
+
+                           $stmt->execute();
+                    }
+
+                  
+                 }
+		    $db->commit();
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Compra realizada.'
+                    'status' => 200,
+                    'status_message' => 'Compra realizada.'
                 );
                 header("HTTP/1.0 200 ");
             }
             // ======== =========== ==========================
         } catch (PDOException $e) {
+            $db->rollBack();
             $response = array(
-                'code' => 400,
-                'message' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "inserindo.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
 
@@ -129,43 +191,41 @@ Class Compra
 
             $db = Banco::conexao();
 
-            parse_str(file_get_contents('php://input'), $post_vars);
-
-            /// UPDATE funcionarios AS f LEFT JOIN funcionarios_enderecos as fe ON f.pk_funcionario = fe.fk_funcionario SET f.nome = nome
-            //WHERE f.pk_funcionario = ??
-            $query = "UPDATE compras AS co LEFT JOIN compras_itens AS ci ON co.pk_compra = ci.fk_compra
-			SET co.fk_fornecedor = :fkFornecedor, co.fk_funcionario = :fkFuncionario, co.datas = :datas, ci.fk_veiculo = :fkVeiculo, ci.valor_compra =:valorCompra
-			WHERE co.pk_compra=:id";
+             $usuario = self::getUsuario();
+             $statusCompra = "CANCELADA";
+             $datas = self::getData();
+            parse_str(file_get_contents('php://input'), $post_vars);          
+          
+            $query = "UPDATE compras AS co LEFT JOIN financeiros_entradas AS fe ON co.pk_compra = fe.fk_compra
+			SET co.statusCompra = '$statusCompra', co.usuarioUpdate ='$usuario', co.dataUpdate ='$datas' ,fe.statusFinanceiro = '$statusCompra', fe.usuarioUpdate ='$usuario', fe.dataUpdate ='$datas' WHERE co.pk_compra=:id";
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':fkFornecedor', $post_vars['fkFornecedor'], PDO::PARAM_INT);
-            $stmt->bindParam(':fkFuncionario', $post_vars['fkFuncionario'], PDO::PARAM_INT);
-            $stmt->bindParam(':datas', $post_vars['datas'], PDO::PARAM_STR);
-            $stmt->bindParam(':fkVeiculo', $post_vars['fkVeiculo'], PDO::PARAM_STR);
-            $stmt->bindParam(':valorCompra', $post_vars['valorCompra'], PDO::PARAM_STR);
+            $stmt->bindParam(':id', $post_vars['pkCompra'], PDO::PARAM_INT);         
+           
 
 
             $stmt->execute();
             $response = array(
-                'code' => 200,
-                'message' => 'Cliente Atualizado com sucesso'
-
-
+                'status' => 200,
+                'status_message' => 'Compra Cancelada com Sucesso'
             );
-            header("HTTP/1.0 400 ");
+            header("HTTP/1.0 200 ");
+
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
+             header("HTTP/1.0 400 ");
+             self::getUsuario();
+            $argumentos = "update.....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a fun��o para gravar os logs
 
         }
 
         header('Content-Type: application/json');
         echo json_encode($response);
     }
-
 
     function delete_Compra($id)
     {
@@ -174,6 +234,9 @@ Class Compra
 
             $db = Banco::conexao();
             $status = 'DESATIVADO';
+	     $usuario = self::getUsuario();
+            
+            $datas = self::getData();
 
             $query = "SELECT * FROM compras WHERE status ='ATIVO' AND pk_compra=:id";
             $stmt = $db->prepare($query);
@@ -184,21 +247,24 @@ Class Compra
             //Essa condição é para verificar se a url existe no servidor. Porque fazemos a consulta pelos funcionarios ativos
             if ($row == null) {
                 $response = array(
-                    'code' => 404,
-                    'message' => 'Recurso nao encontrado'
+                    'status' => 404,
+                    'status_message' => 'Recurso nao encontrado'
 
                 );
 
                 header("HTTP/1.0 404 ");
             } else {
-                $query = "UPDATE  compras SET status='{$status}' WHERE pk_compra= :id";
+		   $query = "UPDATE compras AS co LEFT JOIN financeiros_entradas AS fe ON co.pk_compra = fe.fk_compra
+			SET co.status = '$status', co.usuarioUpdate ='$usuario', co.dataUpdate ='$datas', fe.status = '$status', fe.usuarioUpdate ='$usuario', fe.dataUpdate='$datas' 
+            WHERE co.pk_compra=:id";
+
                 $stmt = $db->prepare($query);
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
 
                 $response = array(
-                    'code' => 200,
-                    'message' => 'Compra Excluida com Sucesso'
+                    'status' => 200,
+                    'status_message' => 'Compra Excluida com Sucesso'
                 );
                 header("HTTP/1.0 200 ");
             }
@@ -206,10 +272,14 @@ Class Compra
 
         } catch (PDOException $e) {
             $response = array(
-                'code' => 400,
-                'errorMysql: ' => $e->getMessage()
+                'status' => 400,
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "delete .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
 
         }
         unset($db);

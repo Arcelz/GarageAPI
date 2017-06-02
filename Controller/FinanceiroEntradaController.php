@@ -1,5 +1,5 @@
 <?php
-require_once '../Model/FinanceiroSaida.php';
+require_once '../Model/FinanceiroEntrada.php';
 require_once '../Validation/ValidacaoVazio.php';
 
 // Allow from any origin
@@ -38,8 +38,8 @@ switch ($request_method) {
 
     case 'GET':
 
-        if (!empty($_GET["saida_id"])) {
-            $finSaida_id = intval($_GET["saida_id"]);
+        if (!empty($_GET["entrada_id"])) {
+            $finSaida_id = intval($_GET["entrada_id"]);
             $finSaida->get_FinSaida($finSaida_id);
 
         } else {
@@ -49,7 +49,7 @@ switch ($request_method) {
         break;
        case 'PUT':
 
-        $compra_id = intval($_GET["saida_id"]);
+        $compra_id = intval($_GET["entrada_id"]);
         $finSaida ->update_Compra($compra_id);
         break;
 
