@@ -44,8 +44,8 @@ switch ($request_method) {
         foreach ($permicao as $valor) {// percorre o array de permicoes
             if ($valor == '18V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 // Retrive Products
-                if (!empty($_GET["Reparo_id"])) {
-                    $reeparo_id = intval($_GET["Reparo_id"]);
+                if (!empty($_GET["reparo_id"])) {
+                    $reparo_id = intval($_GET["reparo_id"]);
                     $reparo->get_Reparo($reparo_id);
 
                 } else {

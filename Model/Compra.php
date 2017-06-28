@@ -32,12 +32,12 @@ Class Compra
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT c.pk_compra, fo.nome AS nomeFornecedor, f.nome as nomeFuncionario, c.datas, c.numero, c.statusCompra, ci.valor_compra FROM compras AS c LEFT JOIN fornecedores AS fo ON c.fk_fornecedor = fo.pk_fornecedor LEFT JOIN funcionarios AS f ON c.fk_funcionario = f.pk_funcionario LEFT JOIN compras_itens AS ci ON c.pk_compra = ci.fk_compra WHERE c.status = 'ATIVO'";
+            $query = "SELECT c.pk_compra, fo.nome AS nomeFornecedor, f.nome as nomeFuncionario, c.datas, c.numero, c.statusCompra, ci.valor_compra FROM compras AS c LEFT JOIN fornecedores AS fo ON c.fk_fornecedor = fo.pk_fornecedor LEFT JOIN funcionarios AS f ON c.fk_funcionario = f.pk_funcionario LEFT JOIN compras_itens AS ci ON c.pk_compra = ci.fk_compra WHERE c.status = 'ATIVO' AND c.statusCompra='EFETUADA'";
 
             $response = array();
-            if ($id != 0) {
-                //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query = " SELECT * FROM compras AS c LEFT JOIN compras_itens AS ci ON c.pk_compra = ci.fk_compra WHERE c.pk_compra = :id AND status ='ATIVO'";
+            if ($id == 1) {
+                
+                $query = " SELECT c.pk_compra, fo.nome AS nomeFornecedor, f.nome as nomeFuncionario, c.datas, c.numero, c.statusCompra, ci.valor_compra FROM compras AS c LEFT JOIN fornecedores AS fo ON c.fk_fornecedor = fo.pk_fornecedor LEFT JOIN funcionarios AS f ON c.fk_funcionario = f.pk_funcionario LEFT JOIN compras_itens AS ci ON c.pk_compra = ci.fk_compra WHERE c.status = 'ATIVO' AND c.statusCompra='CANCELADA'";
 
             }
 
@@ -88,19 +88,37 @@ Class Compra
            
             $status = 'ATIVO';
             $statusCompra = "EFETUADA";
+            $statusVeiculo = 'GARAGEM';    
 
+            $datas = self::getData();           
+           
 
-            $datas = self::getData();
-            $dataCriacao = self::getData();
+            $query0 = "INSERT INTO veiculos(fk_tipo,fk_marca,ano,valor_compra,statusVeiculo,status, placa, fk_modelo) values
+                        (:fkTipo,:fkMarca,:ano,:valorCompra,:statusVeiculo,:status, :placa, :fkModelo)";
+            $stmt = $db->prepare($query0);
+
+            $stmt->bindParam(':fkTipo', $_POST['fkTipo'], PDO::PARAM_INT);
+            $stmt->bindParam(':fkMarca', $_POST['fkMarca'], PDO::PARAM_INT);
+             $stmt->bindParam(':fkModelo', $_POST['fkModelo'], PDO::PARAM_INT);
+            $stmt->bindParam(':ano', $_POST['ano'], PDO::PARAM_STR);
+            $stmt->bindParam(':placa', $_POST['placa'], PDO::PARAM_STR);
+            $stmt->bindParam(':valorCompra', $_POST['valorCompra'], PDO::PARAM_STR);
+           
+            $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+            $stmt->bindParam(':statusVeiculo', $statusVeiculo, PDO::PARAM_STR);
+
+            $stmt->execute();
+            $fk_Veiculo = $db->lastInsertId();//retorna o ultimo id
+           // $dataCriacao = self::getData();
             //Este bloco é responsavel por retornar o ultimo registro de venda realizado.
             //Usamos este metado para mostrar organizado a quantidade de venda realizada. Para não ter que usar o id.
-            $queryCont = "SELECT pk_compra,numero FROM compras ORDER BY pk_compra DESC LIMIT 1 ";
+         /*   $queryCont = "SELECT pk_compra,numero FROM compras ORDER BY pk_compra DESC LIMIT 1 ";
             $stmt = $db->prepare($queryCont);
             $stmt->execute();
 
             $returnNumero = $stmt->fetch(PDO::FETCH_ASSOC);
             $numero = $returnNumero['numero'] + 1;
-            // ======== =========== ==========================
+            // ======== =========== ==========================*/
 
             $query = "INSERT INTO compras(fk_fornecedor,fk_funcionario,datas,status,numero, statusCompra, dataCriacao, usuarioInsert) values 
                 (:fkFornecedor, :fkFuncionario,:datas,:status,:numero, :statusCompra, :dataCriacao, :usuario )";
@@ -112,7 +130,7 @@ Class Compra
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
             $stmt->bindParam(':statusCompra', $statusCompra, PDO::PARAM_STR);
             $stmt->bindParam(':numero', $numero, PDO::PARAM_INT);
-            $stmt->bindParam(':dataCriacao', $dataCriacao, PDO::PARAM_STR);
+            $stmt->bindParam(':dataCriacao', $datas, PDO::PARAM_STR);
              $stmt->bindParam(':usuario', self::getUsuario(), PDO::PARAM_STR);
             $stmt->execute();
 
@@ -131,23 +149,26 @@ Class Compra
                 $stmt = $db->prepare($query2);
                 
                 $stmt->bindParam(':fkCompra', $fk_compra, PDO::PARAM_INT);
-                $stmt->bindParam(':fkVeiculo', $_POST['fkVeiculo'], PDO::PARAM_INT);
+                $stmt->bindParam(':fkVeiculo',  $fk_Veiculo, PDO::PARAM_INT);
                 $stmt->bindParam(':valorCompra', $_POST['valorCompra'], PDO::PARAM_INT);
                 
-                $stmt->execute();
+                $stmt->execute();                
+               
                 
                  $returnComprasItens = $stmt->rowCount();
 
                  if($returnComprasItens >0){
                     $statusFinanceiro = "PENDENTE";
+		      $descricao = "COMPRA";
+                    $classificacao = "VEICULOS";
                     $usuario = self::getUsuario();
                     $parcela = $_POST['parcela'];
                     //$valor = $_POST['valorTotal'];
 
                     parse_str(file_get_contents('php://input'), $post_vars);
                     for($i = 0; $i<$parcela; $i++){
-                          $query3 = "INSERT INTO financeiros_entradas(fk_compra, data_emissao, data_vencimento,valor,status,statusFinanceiro, usuarioCriacao, dataCriacao) values (
-                          '$fk_compra','$datas',:dataVencimento,:valor,'$status','$statusFinanceiro','$usuario','$datas')";
+                          $query3 = "INSERT INTO financeiros_entradas(fk_compra,descricao,classificacao, data_emissao, data_vencimento,valor,status,statusFinanceiro, usuarioCriacao, dataCriacao) values (
+                          '$fk_compra','$descricao','$classificacao','$datas',:dataVencimento,:valor,'$status','$statusFinanceiro','$usuario','$datas')";
                           $stmt = $db->prepare($query3);
 
                            $stmt->bindParam(':valor', $_POST['valorTotal'], PDO::PARAM_INT);

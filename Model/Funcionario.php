@@ -20,6 +20,10 @@ Class Funcionario
         $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
     }
 
+      public static function getData(){
+        $getData = new GerarData();
+        return $getData ->gerarDataHora();
+    }
 
 
     function get_Funcionario($id = 0)
@@ -28,7 +32,7 @@ Class Funcionario
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT f.pk_funcionario,f.fk_cargo,f.nome as nomes,f.cpf,f.email,f.contato1,f.contato,f.status,c.pk_cargos,c.nome,c.status FROM funcionarios as f LEFT JOIN cargos as c ON f.fk_cargo = c.pk_cargos WHERE f.status ='ATIVO' AND f.pk_funcionario > 1";
+            $query = "SELECT f.pk_funcionario,f.fk_cargo,f.nome as nomes,f.cpf,f.email,f.contato1,f.contato,f.avatar,f.status,c.pk_cargos,c.nome,c.status FROM funcionarios as f LEFT JOIN cargos as c ON f.fk_cargo = c.pk_cargos WHERE f.status ='ATIVO' AND f.pk_funcionario > 1";
 
             $response = array();
             if ($id != 0) {
@@ -78,12 +82,16 @@ Class Funcionario
 
     public function insert_Funcionario()
     {
-
+	
         try {
             $db = Banco::conexao();
             $status = 'ATIVO';
-
-            $query = "INSERT INTO funcionarios(nome,cpf,email,contato1,contato,status,fk_cargo) values (:nome,:cpf,:email,:contato1,:contato,:status,:fkCargo)";
+	    $data = self::getData();
+            $dataEx = explode("/",$data);
+	    $diretorio = "../imagens/".$dataEx[1]."-".$dataEx[0];
+	    $filename_path = md5(time().uniqid()).".jpg";// salvar imagem
+	    $urlIMG = substr($diretorio,2)."/".$filename_path;
+            $query = "INSERT INTO funcionarios(nome,cpf,email,contato1,contato,status,fk_cargo,avatar) values (:nome,:cpf,:email,:contato1,:contato,:status,:fkCargo,'$urlIMG')";
             $stmt = $db->prepare($query);
 
             $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
@@ -117,6 +125,12 @@ Class Funcionario
                     'status' => 200,
                     'status_message' => 'Funcionario adicionado.'
                 );
+ if (!is_dir($diretorio)) {   
+ 	 mkdir($diretorio, 0777, true);
+         }
+ $decoded=base64_decode($_POST['avatar']);// salvar imagem
+            file_put_contents($diretorio."/".$filename_path,$decoded);// salvar imagem
+
                 header("HTTP/1.0 200 ");
             }
 
@@ -141,16 +155,31 @@ Class Funcionario
     {
 
         try {
+		 
+
 
             $db = Banco::conexao();
 		
             parse_str(file_get_contents('php://input'), $post_vars);
+		if(isset($post_vars['avatar'])){
+			$data = self::getData();
+			$dataEx = explode("/",$data);
+	    		$diretorio = "../imagens/".$dataEx[1]."-".$dataEx[0];
+		    $filename_path = md5(time().uniqid()).".jpg";// salvar imagem
+		    $urlIMG = substr($diretorio,2)."/".$filename_path;
 
-            /// UPDATE funcionarios AS f LEFT JOIN funcionarios_enderecos as fe ON f.pk_funcionario = fe.fk_funcionario SET f.nome = nome
-            //WHERE f.pk_funcionario = ??
-            $query = "UPDATE funcionarios AS f  JOIN funcionarios_enderecos AS fe ON f.pk_funcionario = fe.fk_funcionario
-          SET f.nome=:nome,f.cpf=:cpf, f.fk_cargo=:fkCargo,f.email=:email,f.contato1=:contato1,fe.logradouro=:logradouro,fe.bairro=:bairro,fe.cidade=:cidade,
-            fe.estado=:estado,fe.pais=:pais,fe.cep=:cep,f.contato=:contato  WHERE f.pk_funcionario= :id";
+				
+			$query = "UPDATE funcionarios AS f  JOIN funcionarios_enderecos AS fe ON f.pk_funcionario = fe.fk_funcionario
+         		 SET f.nome=:nome,f.cpf=:cpf,f.avatar='$urlIMG', f.fk_cargo=:fkCargo,f.email=:email,f.contato1=:contato1,fe.logradouro=:logradouro,fe.bairro=:bairro,fe.cidade=:cidade,
+         		   fe.estado=:estado,fe.pais=:pais,fe.cep=:cep,f.contato=:contato  WHERE f.pk_funcionario= :id";
+		}else{
+			  /// UPDATE funcionarios AS f LEFT JOIN funcionarios_enderecos as fe ON f.pk_funcionario = fe.fk_funcionario SET f.nome = nome
+            		//WHERE f.pk_funcionario = ??
+           		 $query = "UPDATE funcionarios AS f  JOIN funcionarios_enderecos AS fe ON f.pk_funcionario = fe.fk_funcionario
+         		 SET f.nome=:nome,f.cpf=:cpf, f.fk_cargo=:fkCargo,f.email=:email,f.contato1=:contato1,fe.logradouro=:logradouro,fe.bairro=:bairro,fe.cidade=:cidade,
+         		   fe.estado=:estado,fe.pais=:pais,fe.cep=:cep,f.contato=:contato  WHERE f.pk_funcionario= :id";
+		}
+          
 
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $post_vars['pk_funcionario'], PDO::PARAM_INT);
@@ -173,6 +202,15 @@ Class Funcionario
                 'status' => 200,
                 'status_message' => 'Funcionario Atualizado com sucesso'
 		);
+		
+		if(isset($post_vars['avatar'])){
+			if (!is_dir($diretorio)) {   
+ 	 mkdir($diretorio, 0777, true);
+         }
+ $decoded=base64_decode($post_vars['avatar']);// salvar imagem
+            file_put_contents($diretorio."/".$filename_path,$decoded);// salvar imagem
+
+		}
              header("HTTP/1.0 200 ");
 
         } catch (PDOException $e) {

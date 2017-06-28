@@ -26,7 +26,9 @@ Class FinanceiroSaida
     }
 
 
-
+    /**
+     * @param int $id
+     */
     function get_FinSaida($id = 0)
     {
         try {
@@ -44,6 +46,16 @@ Class FinanceiroSaida
 	    else if ($id == 2) {
                 $query = "SELECT * FROM financeiros_entradas WHERE status ='ATIVO' AND statusFinanceiro='CANCELADA'";
             }
+	     else if ($id==4){
+		   $query= "SELECT sum(soma) as caixa FROM(SELECT sum(valor *(-1))AS soma , cast('E'AS CHAR(1))AS t FROM financeiros_entradas
+ 			     WHERE data_baixa IS NOT NULL AND statusFinanceiro='PAGO'  UNION ALL
+			     SELECT sum(valor) AS soma, cast('S'AS CHAR(1))AS t FROM financeiros_saidas
+		            WHERE data_baixa IS NOT NULL AND statusFinanceiro='PAGO' ) tabela ";
+	     }else if($id==3){
+			$query="select  sum(valor)as caixa  from financeiros_entradas where statusFinanceiro ='pendente' and status='ATIVO'";
+	     }else if($id==5){
+		$query="select  sum(valor) as caixa  from financeiros_saidas where statusFinanceiro ='pendente' and status='ATIVO'";
+	     }
 
             $stmt = $db->prepare($query);
             $stmt->execute();

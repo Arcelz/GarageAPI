@@ -66,8 +66,13 @@ switch ($request_method) {
         $verificado = true;
         foreach ($permicao as $valor) {// percorre o array de permicoes
             if ($valor == '24C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $venda->insert_Venda();
-                return $verificado = false;
+			if(empty($_POST["consulta"])){
+				$venda->insert_Venda();
+				return $verificado = false;
+			}else{
+				$venda->pesquisar_valor();
+				return $verificado = false;
+			}             
             }
         }
         if ($verificado) {
@@ -99,7 +104,9 @@ switch ($request_method) {
             if ($valor == '24D') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 // Delete Product
                 $venda_id = intval($_GET["venda_id"]);
-                $venda->delete_Venda($venda_id);
+		  $fk_veiculo = intval($_GET["fk_veiculo"]);
+
+                $venda->delete_Venda($venda_id,$fk_veiculo);
                 return $verificado = false;
             }
         }

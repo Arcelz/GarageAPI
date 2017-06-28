@@ -29,7 +29,7 @@ Class Veiculo
              
              $consulta =  $_POST['consulta'];
             
-             $query = "SELECT * FROM veiculos WHERE placa LIKE '%$consulta%' AND status ='ATIVO'";
+             $query = "SELECT * FROM veiculos WHERE placa LIKE '%$consulta%' AND statusVeiculo ='GARAGEM' AND status ='ATIVO'";
 
             $stmt = $db->prepare($query);
             //$stmt->bindParam(':id', $id, PDO::PARAM_STR);
@@ -42,7 +42,7 @@ Class Veiculo
             if ($row == null) {
                  $response = array(
                     'status' => 400,
-                    'status_message' => 'Nao foi possivel realizar a pesquisa'
+                    'status_message' => 'Nao foi encontrada nenhuma a resultado'
                 );
                 header("HTTP/1.0 400 ");
 
@@ -74,30 +74,34 @@ Class Veiculo
 
     }
 
-    function get_Veiculo($id = 0)
+    function get_Veiculo($id)
     {
         try {
             $db = Banco::conexao();
+		     		
+		
+             $response = array();
+		if($id =='garagem'){
+			$query = "SELECT v.pk_veiculo, tv.nome, m.nome As nomeMarca, mo.nome AS nomeModelo, v.placa, v.ano, v.valor_compra, v.status, v.statusVeiculo  FROM veiculos AS v LEFT JOIN tipos_veiculos AS tv ON v.fk_tipo = tv.pk_tipo LEFT JOIN marcas m ON v.fk_marca = m.pk_marca LEFT JOIN modelos AS mo ON v.fk_modelo = mo.pk_modelo WHERE v.status ='ATIVO' and v.statusVeiculo='GARAGEM'";
+		}		
 
-//            
-            //Essa query busca todos os regestritos
-            $query = "SELECT v.pk_veiculo, tv.nome, m.nome As nomeMarca, mo.nome AS nomeModelo, v.placa, v.ano, v.valor_compra, v.status  FROM veiculos AS v LEFT JOIN tipos_veiculos AS tv ON v.fk_tipo = tv.pk_tipo LEFT JOIN marcas m ON v.fk_marca = m.pk_marca LEFT JOIN modelos AS mo ON v.fk_modelo = mo.pk_modelo WHERE v.status ='ATIVO'";
-
-            //select * FROM veiculos WHERE nome like '%%' and pk_veiculo = 1 and status = 'ATIVO'
-
-            $response = array();
-            if ($id != 0) {
+		if($id == 'vendidos'){
+			$query = "SELECT v.pk_veiculo, tv.nome, m.nome As nomeMarca, mo.nome AS nomeModelo, v.placa, v.ano, v.valor_compra, v.status, v.statusVeiculo  FROM veiculos AS v LEFT JOIN tipos_veiculos AS tv ON v.fk_tipo = tv.pk_tipo LEFT JOIN marcas m ON v.fk_marca = m.pk_marca LEFT JOIN modelos AS mo ON v.fk_modelo = mo.pk_modelo WHERE v.status ='ATIVO' and v.statusVeiculo='VENDIDO'";
+		}
+           
+            if ($id !=0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
                 $query = " SELECT v.pk_veiculo, tv.pk_tipo, tv.nome, m.pk_marca, m.nome As nomeMarca,mo.pk_modelo, mo.nome AS nomeModelo, v.placa, v.ano, v.valor_compra, v.status  FROM veiculos AS v LEFT JOIN tipos_veiculos AS tv ON v.fk_tipo = tv.pk_tipo LEFT JOIN marcas m ON v.fk_marca = m.pk_marca LEFT JOIN 
-				modelos AS mo ON v.fk_modelo = mo.pk_modelo WHERE v.status ='ATIVO' AND v.pk_veiculo  = :id LIMIT 1";
+				modelos AS mo ON v.fk_modelo = mo.pk_modelo WHERE v.status ='ATIVO' AND v.statusVeiculo='GARAGEM' AND v.pk_veiculo  = :id LIMIT 1";
 
             }
-
+		
+		
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+	     $stmt->bindParam(':id', $id, PDO::PARAM_INT);     
             $stmt->execute();
             $row = $stmt->fetchAll();
-            //var_dump($row);
+          
 
 
             if ($row == null) {
@@ -188,13 +192,13 @@ Class Veiculo
 
             parse_str(file_get_contents('php://input'), $post_vars);
 
-           $query = "UPDATE veiculos  SET  fk_tipo=:fkTipo,fk_modelo=:fkModelo, fk_marca=:fkMarca, ano=:ano, valor_compra=:valorCompra WHERE pk_veiculo= :id";
+           $query = "UPDATE veiculos  SET  fk_tipo=:fkTipo,fk_modelo=:fkModelo, fk_marca=:fkMarca, ano=:ano, placa=:placa WHERE pk_veiculo= :id";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $post_vars['pk_veiculo'], PDO::PARAM_INT);
             $stmt->bindParam(':fkTipo', $post_vars['fkTipo'], PDO::PARAM_INT);
             $stmt->bindParam(':fkMarca', $post_vars['fkMarca'], PDO::PARAM_INT);//fkTipo
             $stmt->bindParam(':ano', $post_vars['ano'], PDO::PARAM_STR);//fkVeiculo
-            $stmt->bindParam(':valorCompra', $post_vars['valorCompra'], PDO::PARAM_STR);
+            $stmt->bindParam(':placa', $post_vars['placa'], PDO::PARAM_STR);
             $stmt->bindParam(':fkModelo', $post_vars['fkModelo'], PDO::PARAM_STR);
 
             $stmt->execute();
@@ -245,6 +249,14 @@ Class Veiculo
                 header("HTTP/1.0 404 ");
             } else {
                 $query = "UPDATE  veiculos SET status='{$status}',statusVeiculo='{$statusVeiculo}' WHERE pk_veiculo= :id";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+			
+		  $query = "UPDATE compras AS co LEFT JOIN financeiros_entradas AS fe ON co.pk_compra = fe.fk_compra
+			SET co.status = '$status', co.usuarioUpdate ='$usuario', co.dataUpdate ='$datas', fe.status = '$status', fe.usuarioUpdate ='$usuario', fe.dataUpdate='$datas' 
+           		 WHERE co.pk_compra=:id";
+
                 $stmt = $db->prepare($query);
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();

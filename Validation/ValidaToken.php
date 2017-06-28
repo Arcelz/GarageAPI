@@ -42,7 +42,7 @@ class ValidaToken
     {
         $parser = new Parser();
         $oToken = $parser->parse($token);
-        $permicao = $oToken->getClaim('Permição');
+        $permicao = $oToken->getClaim('Permicao');
         return $permicao;
 
     }

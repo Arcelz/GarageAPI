@@ -20,7 +20,7 @@ Class Cliente
     }
 
 
-    function get_Cliente($product_id = 0)
+    function get_Cliente($id = 0)
     {
         try {
             $db = Banco::conexao();
@@ -29,14 +29,14 @@ Class Cliente
             $query = "SELECT * FROM clientes WHERE status ='ATIVO'";
 
             $response = array();
-            if ($product_id != 0) {
+            if ($id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query = " select * from clientes as c left join clientes_enderecos as ce on c.pk_cliente = ce.fk_cliente where c.status = 'ATIVO' AND c.pk_cliente = :cargo_id LIMIT 1";
+                $query = " select * from clientes as c left join clientes_enderecos as ce on c.pk_cliente = ce.fk_cliente where c.status = 'ATIVO' AND c.pk_cliente = :id LIMIT 1";
 
             }
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':cargo_id', $_GET["cliente_id"], PDO::PARAM_INT);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $row = $stmt->fetchAll();
 
@@ -124,7 +124,7 @@ Class Cliente
             );
             header("HTTP/1.0 400 ");
             self::getUsuario();
-            $argumentos = "Inserido cargos.....";
+            $argumentos = "Inserido Cliente.....";
             self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
 
 
@@ -143,14 +143,13 @@ Class Cliente
 
             parse_str(file_get_contents('php://input'), $post_vars);
 
-            /// UPDATE funcionarios AS f LEFT JOIN funcionarios_enderecos as fe ON f.pk_funcionario = fe.fk_funcionario SET f.nome = nome
-            //WHERE f.pk_funcionario = ??
-            $query = "UPDATE clientes AS cli  JOIN clientes_enderecos AS ce ON cli.pk_cliente = ce.fk_cliente
+            
+            $query = "UPDATE clientes AS cli LEFT JOIN clientes_enderecos AS ce ON cli.pk_cliente = ce.fk_cliente
           SET cli.nome=:nome,cli.cpf=:cpf,cli.email=:email,cli.contato1=:contato1,ce.logradouro=:logradouro,ce.bairro=:bairro,ce.cidade=:cidade,
             ce.estado=:estado,ce.pais=:pais,ce.cep=:cep,cli.contato=:contato  WHERE cli.pk_cliente= :pk_cliente";
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':pk_cliente', $cliente_id, PDO::PARAM_INT);
+            $stmt->bindParam(':pk_cliente', $post_vars['pk_cliente'], PDO::PARAM_INT);
             $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
             $stmt->bindParam(':cpf', $post_vars['cpf'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $post_vars['email'], PDO::PARAM_STR);
@@ -170,14 +169,14 @@ Class Cliente
 
 
             );
-            header("HTTP/1.0 400 ");
+            header("HTTP/1.0 200 ");
         } catch (PDOException $e) {
             $response = array(
                 'status' => 400,
                 'status_message' => $e->getMessage()
             );
             self::getUsuario();
-            $argumentos = "Update cargos.....";
+            $argumentos = "Update Cliente.....";
             self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
 
 

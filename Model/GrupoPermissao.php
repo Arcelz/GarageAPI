@@ -36,7 +36,7 @@ class GrupoPermissao
                     $query = "INSERT INTO grupos_permissoes (grupo_id,permissao_id) VALUES (:grupo_id,:permissao_id)";
                     $stmt = $db->prepare($query);
                     $stmt->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_STR);
-                    $stmt->bindParam(':permissao_id', $array[$i], PDO::PARAM_STR);
+                    $stmt->bindParam(':permissao_id', $array[$i]['id'], PDO::PARAM_STR);
                     $stmt->execute();
 		}
                     $status = 200;
@@ -65,7 +65,7 @@ class GrupoPermissao
             $stmt = $db->prepare($query);
             $stmt->bindParam(':grupo_id', $grupo_id, PDO::PARAM_INT);
             $stmt->execute();
-            while ($row = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $response[] = $row;
             }
         } catch (PDOException $e) {

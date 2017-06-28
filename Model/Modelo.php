@@ -28,12 +28,12 @@ Class Modelo
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT * FROM modelos ";
+            $query = "SELECT * FROM modelos where status='ATIVO' ";
 
             $response = array();
             if ($id != 0) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query .= " WHERE  pk_modelo = :id LIMIT 1";
+                $query .= " and pk_modelo = :id LIMIT 1";
 
             }
 
@@ -130,7 +130,7 @@ Class Modelo
 
             $query = "UPDATE modelos  SET nome=:nome  WHERE pk_modelo=:id";
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $post_vars['pk_modelo'], PDO::PARAM_INT);
             $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
 
             $stmt->execute();
@@ -162,7 +162,7 @@ Class Modelo
             $db = Banco::conexao();
             $status = 'DESATIVADO';
 
-            $query = "SELECT * FROM modelos WHERE status ='ATIVO' AND pk_cargos=:id";
+            $query = "SELECT * FROM modelos WHERE status ='ATIVO' AND pk_modelo=:id";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();

@@ -1,5 +1,6 @@
 <?php
-require_once '../Model/Banco.php';
+require_once '../Model/BancoLogin.php';
+
 /**
  * Created by PhpStorm.
  * User: User
@@ -9,22 +10,22 @@ require_once '../Model/Banco.php';
 class ValidacaoLogin
 {
 
-    function verifica_login($login, $senha)
+    function verifica_login()
     {
-        $db = Banco::conexao();
-        $query="SELECT * FROM usuarios WHERE status='ATIVO' and login=:login";
+        $db = BancoLogin::conexao();
+        $query = "SELECT * FROM usuarios WHERE statusUsuario='ATIVO' and login=:login";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':login', $_POST['login'], PDO::PARAM_STR);
         $stmt->execute();
 
-        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $senha2 = $result['senha'];
-        if (password_verify($senha, $senha2)) {
-            return true;
+        if (password_verify($_POST['senha'], $senha2)) {
+            if ($result['statusGeral'] != 'PAGO') {
+                return 2;
+            }
+            return 1;
         }
-        else {
-            return false;
-        }
-
+        return 0;
     }
 }

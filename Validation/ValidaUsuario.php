@@ -1,4 +1,5 @@
 <?php
+require_once '../Model/BancoLogin.php';
 require_once '../Model/Banco.php';
 
 
@@ -13,30 +14,38 @@ class ValidaUsuario
 
     function valida_permicao($login)// função para trazer as permições do usuario no sistema.
     {
-        $db = Banco::conexao();
-        $query = "SELECT GROUP_CONCAT(p.permissao) as permissoes,GROUP_CONCAT(p.fk_modulo) as modulo FROM usuarios AS u JOIN usuarios_grupos as ug ON u.usuario_id=ug.usuario_id JOIN grupos AS g ON g.pk_grupo=ug.grupo_id JOIN grupos_permissoes AS gp ON gp.grupo_id= g.pk_grupo JOIN permissoes as p ON p.pk_permissao = gp.permissao_id where u.status='ATIVO' AND u.login = :login";
+        $db = BancoLogin::conexao();
+        $query = "SELECT p.nome,u.nomeBanco FROM usuarios AS u JOIN usuarios_grupos as ug ON u.usuario_id=ug.usuario_id JOIN grupos AS g ON g.grupo_id=ug.grupo_id JOIN grupos_permissoes AS gp ON gp.grupo_id= g.grupo_id JOIN permissoes as p ON p.permissao_id = gp.permissao_id where u.login = :login";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+        $stmt->execute();
+        $verifica = true;
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if ($verifica){
+                $response['nomeBanco']=$row['nomeBanco'];
+                $verifica = false;
+            }
+            $response[$row['nome']] = true;
+        }
+        return $response;
+    }
+    function valida_funcionario($login)// função para trazer as permições do usuario no sistema.
+    {
+        $db = BancoLogin::conexao();
+        $query = "SELECT u.fk_funcionario as nome  FROM usuarios as u where u.login = :login";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $permissoes = $result['permissoes'];
-        $modulo = $result['modulo'];
-        $arrayPermicao = preg_split('/,/', $permissoes);
-        $arrayModulo = preg_split('/,/', $modulo);
-        for ($i=0; $i < count($arrayPermicao) ; $i++) {
-            $permissoesModulo[]=$arrayModulo[$i].$arrayPermicao[$i];
-        }
-        return $permissoesModulo;
-
+        return $result['nome'];
     }
 
-    function valida_dados($login)// função que retorna os dados do usuario.
+    function valida_dados($funcionario)// função que retorna os dados do usuario.
     {
-
         $db = Banco::conexao();
-        $query = "SELECT f.nome,f.email from usuarios as u JOIN funcionarios as f on u.fk_funcionario=f.pk_funcionario WHERE u.login = :login";
+        $query = "SELECT f.nome,f.email,f.avatar from funcionarios as f WHERE f.pk_funcionario = :funcionario";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+        $stmt->bindParam(':funcionario', $funcionario, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;

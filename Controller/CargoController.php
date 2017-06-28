@@ -40,7 +40,7 @@ $request_method = $_SERVER["REQUEST_METHOD"];
 
 switch ($request_method) {
     case 'GET':
-	 
+	
         $verificacao = true;
         foreach ($permicao as $valor) {// percorre o array de permicoes
             if ($valor == '1V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes

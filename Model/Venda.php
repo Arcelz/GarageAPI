@@ -24,6 +24,43 @@ Class Venda
         $geraLog ->grava_log_erros_banco($arquivo,$argumentos, $erroMysql, self::getUsuario());
     }
 
+	 function pesquisar_valor(){
+
+        try
+        {
+            $db = Banco::conexao();
+            
+		
+	     $response = array();
+           $query= "select sum(r.valor) + v.valor_compra AS valorFinal from veiculos AS v  JOIN reparos AS r ON v.pk_veiculo = r.fk_veiculo WHERE  r.status='ATIVO' and v.pk_veiculo = :id LIMIT 1 ";
+
+            $stmt = $db->prepare($query);
+	     $stmt->bindParam(':id',  $_POST['consulta'], PDO::PARAM_STR);
+            $stmt ->execute();                
+            
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    //$response[]= $row;
+                    array_push($response, $row);
+                }
+            
+        }
+
+        catch(PDOException $e ){
+            $response = array(
+                'status' => 400,
+                'status_message' => $e->getMessage()
+            );
+            header("HTTP/1.0 400 ");
+            self::getUsuario();
+            $argumentos = "Pesquisando .....";
+            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+
+        }
+	
+	header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
 
     function get_Venda($id = 0)
     {
@@ -31,15 +68,16 @@ Class Venda
             $db = Banco::conexao();
 
             //Essa query busca todos os regestritos
-            $query = "SELECT v.pk_venda, cl.nome AS nomeCliente, f.nome as nomeFuncionario, v.dataCriacao,  v.statusVenda, ci.valor_venda FROM vendas AS v LEFT JOIN clientes AS cl ON v.fk_clientes = cl.pk_cliente LEFT JOIN funcionarios AS f ON v.fk_funcionarios = f.pk_funcionario LEFT JOIN vendas_itens AS ci ON v.pk_venda = ci.fk_venda WHERE v.status = 'ATIVO'";
+            $query = "SELECT v.pk_venda, cl.nome AS nomeCliente, ci.fk_veiculo, f.nome as nomeFuncionario, v.dataCriacao,  v.statusVenda, ci.valor_venda FROM vendas AS v LEFT JOIN clientes AS cl ON v.fk_clientes = cl.pk_cliente LEFT JOIN funcionarios AS f ON v.fk_funcionarios = f.pk_funcionario LEFT JOIN vendas_itens AS ci ON v.pk_venda = ci.fk_venda WHERE v.status = 'ATIVO' and v.statusVenda='EFETUADA'";
 
             $response = array();
-            if ($id != 0) {
+            if ($id == 1) {
                 //busca pelo id. Caso o id informando nao seja certo retorna 404.
-                $query = " SELECT * FROM vendas AS v LEFT JOIN vendas_itens AS vi ON v.pk_venda = vi.fk_venda WHERE v.pk_venda = :id AND status ='ATIVO'";
+                $query = " SELECT v.pk_venda, cl.nome AS nomeCliente, f.nome as nomeFuncionario, v.dataCriacao,  v.statusVenda, ci.valor_venda FROM vendas AS v LEFT JOIN clientes AS cl ON v.fk_clientes = cl.pk_cliente LEFT JOIN funcionarios AS f ON v.fk_funcionarios = f.pk_funcionario LEFT JOIN vendas_itens AS ci ON v.pk_venda = ci.fk_venda WHERE v.status = 'ATIVO' and v.statusVenda='CANCELADA'";
 
             }
-
+	
+	    
             $stmt = $db->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -156,6 +194,18 @@ Class Venda
 
                   
                  }
+		   
+	          $fk_veiculo = $_POST['fkVeiculo'];
+                 $statusVeiculo = 'VENDIDO';
+                 $query4 = "UPDATE veiculos SET statusVeiculo='{$statusVeiculo}' WHERE pk_veiculo='{$fk_veiculo}'";
+
+                 $stmt = $db->prepare($query4);
+                 $stmt->execute();
+
+		   $status = 'VENDIDO';
+                 $query5 = "UPDATE reparos SET status='{$status}' WHERE fk_veiculo=' $fk_veiculo'";
+                 $stmt = $db->prepare($query5);
+                 $stmt->execute();
                  $db->commit();
 
                 $response = array(
@@ -169,7 +219,7 @@ Class Venda
             $db->rollBack();
             $response = array(
                 'status' => 400,
-                'message' => $e->getMessage()
+                'status_message' => $e->getMessage()
             );
             header("HTTP/1.0 400 ");
             self::getUsuario();
@@ -198,11 +248,17 @@ Class Venda
 			SET v.statusVenda = '$statusCompra', v.usuarioUpdate ='$usuario', v.dataUpdate ='$datas', fs.statusFinanceiro = '$statusCompra', fs.usuarioUpdate ='$usuario', fs.dataUpdade='$datas' WHERE v.pk_venda=:id";
 
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':id', $post_vars['pkVenda'], PDO::PARAM_INT);         
-           
-
+            $stmt->bindParam(':id', $post_vars['pkVenda'], PDO::PARAM_INT); 
 
             $stmt->execute();
+	     
+	     $fk_veiculo = $post_vars['fk_veiculo'];
+	     $status = 'GARAGEM';
+            $query4 = "UPDATE veiculos SET statusVeiculo='{$status}' WHERE pk_veiculo='{$fk_veiculo}'";
+            $stmt = $db->prepare($query4);
+            $stmt->execute();
+
+
             $response = array(
                 'status' => 200,
                 'status_message' => 'Venda Cancelada com Sucesso'
@@ -225,7 +281,7 @@ Class Venda
         echo json_encode($response);
     }
 
-     function delete_Venda($id)
+     function delete_Venda($id,$fk)
     {
 
         try {
@@ -235,6 +291,8 @@ Class Venda
              $usuario = self::getUsuario();
              
              $datas = self::getData();
+		 parse_str(file_get_contents('php://input'), $post_vars);  
+
 
             $query = "SELECT * FROM vendas WHERE status ='ATIVO' AND pk_venda=:id";
             $stmt = $db->prepare($query);
@@ -253,12 +311,18 @@ Class Venda
                 header("HTTP/1.0 404 ");
             } else {
                 $query = "UPDATE vendas AS v LEFT JOIN financeiros_saidas AS fs ON v.pk_venda = fs.fk_venda
-			SET v.status = '$status', v.usuarioUpdate ='$usuario', v.dataUpdate ='$datas', fs.status = '$status', fs.usuarioUpdate ='$usuario', fs.dataUpdade='$datas' WHERE v.pk_venda=:id";
+			SET v.status = '$status',v.statusVenda='DESATIVADO', v.usuarioUpdate ='$usuario', v.dataUpdate ='$datas', fs.status = '$status', fs.usuarioUpdate ='$usuario', fs.dataUpdade='$datas' WHERE v.pk_venda=:id";
 
 
                 $stmt = $db->prepare($query);
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
+
+		  $fk_veiculo = $post_vars['fk_veiculo'];
+	     	  $status = 'GARAGEM';
+                $query4 = "UPDATE veiculos SET statusVeiculo='{$status}' WHERE pk_veiculo='{$fk}'";
+                $stmt = $db->prepare($query4);
+               $stmt->execute();
 
                 $response = array(
                     'status' => 200,

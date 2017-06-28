@@ -6,7 +6,7 @@
  * $db = Database::conexao();
  * E agora use as funções do PDO (prepare, query, exec) em cima da variável $db.
  */
-class Banco
+class BancoLogin
 {
     # Variável que guarda a conexão PDO.
     protected static $db;
@@ -15,7 +15,7 @@ class Banco
     {
         # Informações sobre o banco de dados:
         $db_host = "localhost";
-        $db_nome = "garage";
+        $db_nome = "controle_sistema";
         $db_usuario = "root";
         $db_senha = "";
         $db_driver = "mysql";
@@ -45,7 +45,7 @@ class Banco
         # Garante uma única instância. Se não existe uma conexão, criamos uma nova.
         if (!self::$db)
         {
-            new Banco();
+            new BancoLogin();
         }
         # Retorna a conexão.
         return self::$db;

@@ -4,13 +4,10 @@ require_once '../Model/Usuario.php';
 require_once '../Validation/ValidaToken.php';
 
 // Allow from any origin
-if(isset($_SERVER["HTTP_ORIGIN"]))
-{
+if (isset($_SERVER["HTTP_ORIGIN"])) {
     // You can decide if the origin in $_SERVER['HTTP_ORIGIN'] is something you want to allow, or as we do here, just allow all
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-}
-else
-{
+} else {
     //No HTTP_ORIGIN set, so we allow any. You can disallow if needed here
     header("Access-Control-Allow-Origin: *");
 }
@@ -18,8 +15,7 @@ else
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Max-Age: 600");    // cache for 10 minutes
 
-if($_SERVER["REQUEST_METHOD"] == "OPTIONS")
-{
+if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
     if (isset($_SERVER["HTTP_ACCESS_CONTROL_REQUEST_METHOD"]))
         header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT"); //Make sure you remove those you do not want to support
 
@@ -35,63 +31,43 @@ $usuario = new Usuario();//instancia a classe de usuario para a chamada das func
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
 
 $permicao = $validaToken->token();
-
+$permicao = (array)$permicao;
 header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
-
 switch ($request_method) {
     case 'GET':
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '21V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                if (!empty($_GET["usuario_id"])) {
-                    $usuario_id = intval($_GET["usuario_id"]);
-                    $usuario->get_usuarios($usuario_id);
-                } else {
-                    $usuario->get_usuarios();
-                }
-                return $verificado = false;
+        if (isset($permicao['usuarioVisualizar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (!empty($_GET["usuario_id"])) {
+                $usuario_id = intval($_GET["usuario_id"]);
+                $usuario->get_usuarios($usuario_id);
+            } else {
+                $usuario->get_usuarios();
             }
-        }
-        if ($verificado) {
+        } else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
         break;
     case 'POST':
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '21C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $usuario->insert_usuario();
-                return $verificado = false;
-            }
-        }
-        if ($verificado) {
+        if (isset($permicao['usuarioCriar'])) {// percorre o array de permicoes
+            // verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            $usuario->insert_usuario();
+        } else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
         break;
     case 'PUT':
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '21C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $usuario_id = intval($_GET["usuario_id"]);
-                $usuario->update_usuario($usuario_id);
-                return $verificado = false;
-            }
-        }
-        if ($verificado) {
+        if (isset($permicao['usuarioCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            $usuario_id = intval($_GET["usuario_id"]);
+            $usuario->update_usuario($usuario_id);
+        } else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
         break;
     case 'DELETE':
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '21D') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $usuario_id = intval($_GET["usuario_id"]);
-                $usuario->delete_usuario($usuario_id);
-                return $verificado = false;
-            }
-        }
-        if ($verificado) {
+        if (isset($permicao['usuarioDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            $usuario_id = intval($_GET["usuario_id"]);
+            $usuario->delete_usuario($usuario_id);
+        } else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
         break;

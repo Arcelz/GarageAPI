@@ -45,7 +45,7 @@ switch ($request_method) {
         foreach ($permicao as $valor) {// percorre o array de permicoes
             if ($valor == '23V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 if (!empty($_GET["veiculo_id"])) {
-                    $veiculo_id = intval($_GET["veiculo_id"]);
+                    $veiculo_id = $_GET["veiculo_id"];
                     $veiculo->get_Veiculo($veiculo_id);
 
                 } else {
