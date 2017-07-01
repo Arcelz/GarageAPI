@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Banco.php';
+require_once 'BancoLogin.php';
 require_once '../log/GeraLog.php';
 require_once  '../Validation/ValidaToken.php';
 
@@ -25,17 +25,14 @@ class Permissao
 
     function insert_permissoes()
     {
-        $status = 0;
-        $statusMessage = '';
-
                 try {
                     $db = Banco::conexao();
-                    $query = "INSERT INTO permissoes (nome,permissao,fk_modulo) VALUES (:nome,:permissao,:modulo_id)";
+                    $query = "INSERT INTO permissoes (nome,permissao,nomeBanco) VALUES (:nome,:permissao,:nomeBanco)";
                     $stmt = $db->prepare($query);
 
                     $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
                     $stmt->bindParam(':permissao', $_POST['permissao'], PDO::PARAM_STR);
-                    $stmt->bindParam(':modulo_id', $_POST['modulo_id'], PDO::PARAM_INT);
+                    $stmt->bindParam(':nomeBanco', $_POST['nomeBanco'], PDO::PARAM_INT);
 
                     $stmt->execute();
                     $status = 200;
@@ -47,19 +44,19 @@ class Permissao
 
         $response = array(
             'status' => $status,
-            'status_message' => $statusMessage
+            'status_message' => $status_message
         );
         header('Content-Type: application/json');
         echo json_encode($response);
     }
 
-    function get_permissoes($pk_permissao = 0)
+    function get_permissoes($pk_permissao = 0,$banco)
     {
         try {
             $db = Banco::conexao();
-            $query = "SELECT * FROM permissoes";
+            $query = "SELECT * FROM permissoes WHERE nomeBanco = '{$banco}'";
             if ($pk_permissao != 0) {
-                $query .= " WHERE pk_permissao = :pk_permissao LIMIT 1";
+                $query .= " AND pk_permissao = :pk_permissao LIMIT 1";
             }
             $stmt = $db->prepare($query);
             $stmt->bindParam(':pk_permissao', $pk_permissao, PDO::PARAM_INT);
@@ -111,8 +108,6 @@ class Permissao
 
     function update_permissao($pk_permissao)
     {
-        $status = 0;
-        $statusMessage = '';
                 try {
                     $db = Banco::conexao();
 

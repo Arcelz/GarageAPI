@@ -23,8 +23,6 @@ class GrupoPermissao
 
     function insert_grupos()
     {
-        $status = 0;
-        $status_message = '';
         $array = $_POST['permissao_id'];
                 try {
                     $db = Banco::conexao();
@@ -54,13 +52,13 @@ class GrupoPermissao
         echo json_encode($response);
     }
 
-    function get_grupos($grupo_id = 0)
+    function get_grupos($grupo_id = 0,$banco)
     {
         try {
             $db = Banco::conexao();
-            $query = "SELECT gp.grupo_id,gp.permissao_id,g.nome as grupo,p.nome as permissao from grupos_permissoes as gp  JOIN grupos as g on gp.grupo_id=g.pk_grupo JOIN permissoes as p ON p.pk_permissao = gp.permissao_id";
+            $query = "SELECT gp.grupo_id,gp.permissao_id,g.nome as grupo,p.nome as permissao from grupos_permissoes as gp  JOIN grupos as g on gp.grupo_id=g.pk_grupo JOIN permissoes as p ON p.pk_permissao = gp.permissao_id WHERE p.nomeBanco = '{$banco}''";
             if ($grupo_id != 0) {
-                $query .= " WHERE gp.grupo_id = :grupo_id";
+                $query .= " AND gp.grupo_id = :grupo_id";
             }
             $stmt = $db->prepare($query);
             $stmt->bindParam(':grupo_id', $grupo_id, PDO::PARAM_INT);

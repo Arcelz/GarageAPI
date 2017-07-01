@@ -15,6 +15,9 @@ RewriteRule ^fornecedores/([0-9]+)/?$ Controller/FornecedorController.php?fornec
 RewriteRule ^usuarios/?$ Controller/UsuarioController.php [NC,L]
 RewriteRule ^usuarios/([0-9]+)/?$ Controller/UsuarioController.php?usuario_id=$1 [NC,L]
 
+RewriteRule ^gerenciadores/?$ Controller/GerenciadorController.php [NC,L]
+RewriteRule ^gerenciadores/([0-9]+)/?$ Controller/GerenciadorController.php?gerenciador_id=$1 [NC,L]
+
 RewriteRule ^auth/login?$ Auth/Login.php [NC,L]
 RewriteRule ^auth/login/([0-9]+)/?$ Auth/Login.php?login_id=$1 [NC,L]
 

@@ -260,3 +260,7 @@ Usuario:  - 2017/06/27 23:44:19 - C:\xampp\htdocs\PHP\GarageAPI\Model\Usuario.ph
 Usuario:  - 2017/06/27 23:45:04 - C:\xampp\htdocs\PHP\GarageAPI\Model\Usuario.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'g.pk_grupo' in 'on clause' 
 =======
 >>>>>>> 51c6cc31b41dcd86f493575e2ef2314ac9c6a87e
+Usuario:  - 2017/06/30 11:52:11 - C:\xampp\htdocs\PHP\GarageAPI\Model\Gerenciador.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'nomeEmpresa' cannot be null 
+Usuario:  - 2017/06/30 12:18:55 - C:\xampp\htdocs\PHP\GarageAPI\Model\Usuario.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'grupo_id' cannot be null 
+Usuario:  - 2017/06/30 12:20:05 - C:\xampp\htdocs\PHP\GarageAPI\Model\Usuario.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin2' for key 'login' 
+Usuario:  - 2017/06/30 12:48:20 - C:\xampp\htdocs\PHP\GarageAPI\Model\Usuario.php  - Argumentos: Delete..... - ErroMysql: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'field list' 

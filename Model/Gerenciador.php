@@ -4,13 +4,12 @@ require_once 'BancoLogin.php';
 require_once '../log/GeraLog.php';
 require_once '../Validation/ValidaToken.php';
 
-class Usuario
+class Gerenciador
 {
     public static function getUsuario()
     {
         $getUsuario = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
         $permicao = $getUsuario->usuario();
-        //var_dump($permicao) ;
         return $permicao;
     }
 
@@ -21,27 +20,21 @@ class Usuario
         $geraLog->grava_log_erros_banco($arquivo, $argumentos, $erroMysql, self::getUsuario());
     }
 
-
-    function insert_usuario($banco)
+    function insert_gerenciador()
     {
         try {
             $db = BancoLogin::conexao();
-            $query = "INSERT INTO usuarios (login,senha,fk_funcionario,statusUsuario,email,nomeBanco,statusGeral) VALUES (:login,:senha,:fk_funcionario,'ATIVO',:email,'{$banco}','PAGO')";
+            $query = "INSERT INTO gerenciadores (nomeEmpresa,cnpj,email,contato,status) VALUES (:nomeEmpresa,:cnpj,:email,:contato,'ATIVO')";
             $stmt = $db->prepare($query);
 
-            $stmt->bindParam(':login', $_POST['login'], PDO::PARAM_STR);
+            $stmt->bindParam(':nomeEmpresa', $_POST['nomeEmpresa'], PDO::PARAM_STR);
+            $stmt->bindParam(':cnpj', $_POST['cnpj'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':senha', password_hash($_POST['senha'], PASSWORD_DEFAULT, ['cost' => 10]), PDO::PARAM_STR);
-            $stmt->bindParam(':fk_funcionario', $_POST['funcionario_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':contato', $_POST['contato'], PDO::PARAM_STR);
             $stmt->execute();
-            $usuarioId = $db->lastInsertId();
 
-            $query2 = "INSERT INTO usuarios_grupos (grupo_id,usuario_id) VALUES (:grupo_id,'{$usuarioId}')";
-            $stmt2 = $db->prepare($query2);
-            $stmt2->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_INT);
-            $stmt2->execute();
             $status = 200;
-            $status_message = 'Usuario adicionado com sucesso';
+            $status_message = 'Gerenciador adicionado com sucesso';
         } catch (PDOException $e) {
             $status = 400;
             $status_message = $e->getMessage();
@@ -59,16 +52,16 @@ class Usuario
         echo json_encode($response);
     }
 
-    function get_usuarios($usuario_id = 0,$banco)
+    function get_gerenciadores($gerenciador_id = 0)
     {
         try {
             $db = BancoLogin::conexao();
-            $query = "SELECT u.usuario_id,u.login,g.grupo_id,g.nome as 'g_nome' FROM usuarios as u JOIN usuarios_grupos ug on u.usuario_id=ug.usuario_id JOIN grupos as g on g.grupo_id=ug.grupo_id WHERE u.statusUsuario = 'ATIVO' AND u.nomeBanco='{$banco}'";
-            if ($usuario_id != 0) {
-                $query .= " AND u.usuario_id = :usuario_id LIMIT 1";
+            $query = "SELECT * FROM gerenciadores WHERE status = 'ATIVO'";
+            if ($gerenciador_id != 0) {
+                $query .= " AND id_gerenciador = :gerenciador_id LIMIT 1";
             }
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+            $stmt->bindParam(':gerenciador_id', $gerenciador_id, PDO::PARAM_INT);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $response[] = $row;
@@ -88,27 +81,20 @@ class Usuario
         echo json_encode($response);
     }
 
-    function delete_usuario($usuario_id,$banco)
+    function delete_gerenciador($gerenciador_id)
     {
+        $status = 'DESATIVADO';
+
         try {
             $db = BancoLogin::conexao();
-            $query = "UPDATE  usuarios SET statusUsuario='DESATIVADO' WHERE usuario_id=:usuario_id AND nomeBanco='{$banco}'";
+            $query = "UPDATE  gerenciadores SET status='{$status}' WHERE id_gerenciador=:gerenciador_id";
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+            $stmt->bindParam(':gerenciador_id', $gerenciador_id, PDO::PARAM_INT);
             $stmt->execute();
-            var_dump($stmt->rowCount());
-            if($stmt->rowCount()!=0){
-                $response = array(
-                    'status' => 200,
-                    'status_message' => 'Usuario deletado com sucesso.'
-                );
-            }
-            else{
-                $response = array(
-                    'status' => 200,
-                    'status_message' => 'Usuario não encontrado.'
-                );
-            }
+            $response = array(
+                'status' => 200,
+                'status_message' => 'Gerenciador deletado com sucesso.'
+            );
         } catch
         (PDOException $e) {
             $response = array(
@@ -127,26 +113,26 @@ class Usuario
     }
 
 
-    function update_usuario($usuario_id)
+    function update_gerenciador($gerenciador_id)
     {
         parse_str(file_get_contents('php://input'), $post_vars);
         try {
             $db = BancoLogin::conexao();
-            $query = "SELECT * FROM usuarios WHERE usuario_id=:usuario_id";
+            $query = "SELECT * FROM gerenciadores WHERE id_gerenciador=:gerenciador_id";
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+            $stmt->bindParam(':gerenciador_id', $gerenciador_id, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() != 0) {
-                $query = "UPDATE usuarios as u LEFT JOIN usuarios_grupos AS gu on u.usuario_id = gu.usuario_id 
-				SET u.login=:login,u.fk_funcionario=:fk_funcionario, gu.grupo_id=:grupo_id WHERE u.usuario_id=:usuario_id";
+                $query = "UPDATE gerenciadores SET email=:email,nomeEmpresa=:nomeEmpresa,cnpj=:cnpj,contato=:contato WHERE id_gerenciador=:gerenciador_id";
                 $stmt = $db->prepare($query);
-                $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
-                $stmt->bindParam(':login', $post_vars['login'], PDO::PARAM_STR);
-                $stmt->bindParam(':grupo_id', $post_vars['grupo_id'], PDO::PARAM_INT);
-                $stmt->bindParam(':fk_funcionario', $post_vars['funcionario_id'], PDO::PARAM_STR);
+                $stmt->bindParam(':gerenciador_id', $gerenciador_id, PDO::PARAM_INT);
+                $stmt->bindParam(':nomeEmpresa', $post_vars['nomeEmpresa'], PDO::PARAM_STR);
+                $stmt->bindParam(':cnpj', $post_vars['cnpj'], PDO::PARAM_INT);
+                $stmt->bindParam(':email', $post_vars['email'], PDO::PARAM_STR);
+                $stmt->bindParam(':contato', $post_vars['contato'], PDO::PARAM_STR);
                 $stmt->execute();
                 $status = 200;
-                $status_message = 'Usuario alterado com sucesso';
+                $status_message = 'Gerenciador alterado com sucesso';
             } else {
                 $status = 400;
                 $status_message = 'Id nao encontrado';

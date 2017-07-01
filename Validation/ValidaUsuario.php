@@ -21,14 +21,15 @@ class ValidaUsuario
         $stmt->execute();
         $verifica = true;
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            if ($verifica){
-                $response['nomeBanco']=$row['nomeBanco'];
+            if ($verifica) {
+                $response['nomeBanco'] = $row['nomeBanco'];
                 $verifica = false;
             }
             $response[$row['nome']] = true;
         }
         return $response;
     }
+
     function valida_funcionario($login)// função para trazer as permições do usuario no sistema.
     {
         $db = BancoLogin::conexao();

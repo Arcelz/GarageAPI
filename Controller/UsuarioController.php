@@ -39,9 +39,9 @@ switch ($request_method) {
         if (isset($permicao['usuarioVisualizar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
             if (!empty($_GET["usuario_id"])) {
                 $usuario_id = intval($_GET["usuario_id"]);
-                $usuario->get_usuarios($usuario_id);
+                $usuario->get_usuarios($usuario_id,$permicao['nomeBanco']);
             } else {
-                $usuario->get_usuarios();
+                $usuario->get_usuarios(0,$permicao['nomeBanco']);
             }
         } else {
             header("HTTP/1.0 203 Acesso não permitido");
@@ -50,7 +50,7 @@ switch ($request_method) {
     case 'POST':
         if (isset($permicao['usuarioCriar'])) {// percorre o array de permicoes
             // verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-            $usuario->insert_usuario();
+            $usuario->insert_usuario($permicao['nomeBanco']);
         } else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
@@ -66,7 +66,7 @@ switch ($request_method) {
     case 'DELETE':
         if (isset($permicao['usuarioDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
             $usuario_id = intval($_GET["usuario_id"]);
-            $usuario->delete_usuario($usuario_id);
+            $usuario->delete_usuario($usuario_id,$permicao['nomeBanco']);
         } else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
