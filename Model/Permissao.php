@@ -27,14 +27,39 @@ class Permissao
     {
                 try {
                     $db = Banco::conexao();
-                    $query = "INSERT INTO permissoes (nome,permissao,nomeBanco) VALUES (:nome,:permissao,:nomeBanco)";
-                    $stmt = $db->prepare($query);
+                    $opcao = $_POST['opcao'];
+                    if (isset($opcao)){
+                        if($opcao == 1){
+                            $array = array("usuarioCriar,usuarioVisualizar,permicaoCriar,permicaoVisualizar");
+                        }
+                        else if($opcao ==2){
+                            // script aki de permissoes
+                        }
+                        else if($opcao ==3) {
+                            // script aki de permissoes
+                        }
+                        for ($i=0;$i<count($array);$i++){
+                            $query = "INSERT INTO permissoes (nome,nomeBanco) VALUES ('{$array[$i]}',:nomeBanco)";
+                            $stmt = $db->prepare($query);
+                            $stmt->bindParam(':nomeBanco', $_POST['nomeBanco'], PDO::PARAM_INT);
+                            $stmt->execute();
+                            $Ids[$i] = $db->lastInsertId();
+                        }
+                        for ($i=0;$i<count($Ids);$i++) {
+                            $query = "INSERT INTO grupos_permissoes (grupo_id,permissao_id) VALUES (:grupo_id,'{$Ids[$i]}')";
+                            $stmt = $db->prepare($query);
+                            $stmt->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_INT);
+                            $stmt->execute();
+                        }
+                    }else{
+                        $query = "INSERT INTO permissoes (nome,permissao,nomeBanco) VALUES (:nome,:permissao,:nomeBanco)";
+                        $stmt = $db->prepare($query);
 
-                    $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
-                    $stmt->bindParam(':permissao', $_POST['permissao'], PDO::PARAM_STR);
-                    $stmt->bindParam(':nomeBanco', $_POST['nomeBanco'], PDO::PARAM_INT);
-
-                    $stmt->execute();
+                        $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
+                        $stmt->bindParam(':permissao', $_POST['permissao'], PDO::PARAM_STR);
+                        $stmt->bindParam(':nomeBanco', $_POST['nomeBanco'], PDO::PARAM_INT);
+                        $stmt->execute();
+                    }
                     $status = 200;
                     $status_message= 'Permissao adicionada com sucesso';
                 } catch (PDOException $e) {
