@@ -35,15 +35,12 @@ $tpReparo = new TipoReparo();
 
 
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
-$permicao=$validaToken->token();
+$permicao=(array)$validaToken->token();
 header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
     case 'GET':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '19V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['tipoReparoVisualizar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 // Retrive Products
                 if (!empty($_GET["tpReparo_id"])) {
                     $tpReparo_id = intval($_GET["tpReparo_id"]);
@@ -53,19 +50,14 @@ switch ($request_method) {
                     $tpReparo->get_tpReparo();
 
                 }
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else{
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
         break;
     case 'POST':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '19C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['tipoReparoCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 $validacao = new ValidacaoVazio();
                 $returnValidacao = $validacao->verificaNome();
                 if ($returnValidacao < 100) {
@@ -77,20 +69,15 @@ switch ($request_method) {
                     echo json_encode($returnValidacao);
                 }
 
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
 
         break;
     case 'PUT':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '19C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['tipoReparoCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 $validacao = new ValidacaoVazio();
                 $returnValidacao = $validacao->verificaNome();
 
@@ -103,27 +90,19 @@ switch ($request_method) {
                     header('Content-Type: application/json');
                     echo json_encode($returnValidacao);
                 }
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
 
         break;
     case 'DELETE':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '19D') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                // Delete Product
+            if (isset($permicao['tipoReparoDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 $tpReparo_id = intval($_GET["tpReparo_id"]);
                 $tpReparo->delete_tpReparo($tpReparo_id);
-                return $verificado = false;
             }
-        }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 

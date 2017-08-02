@@ -6,6 +6,8 @@
  * $db = Database::conexao();
  * E agora use as funções do PDO (prepare, query, exec) em cima da variável $db.
  */
+require_once '../Validation/ValidaToken.php';
+
 class Banco
 {
     # Variável que guarda a conexão PDO.
@@ -13,38 +15,38 @@ class Banco
     # Private construct - garante que a classe só possa ser instanciada internamente.
     private function __construct()
     {
+        $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
+        $nomeBanco = (array)$validaToken->busca_banco();
+        $nomeBanco =  $nomeBanco['nomeBanco'];
         # Informações sobre o banco de dados:
         $db_host = "localhost";
-        $db_nome = "garage";
+        $db_nome = $nomeBanco;
         $db_usuario = "root";
         $db_senha = "";
         $db_driver = "mysql";
         # Informações sobre o sistema:
         $sistema_titulo = "GarageAPI";
         $sistema_email = "matheusneeves@hotmail.com";
-        try
-        {
+        try {
             # Atribui o objeto PDO à variável $db.
             self::$db = new PDO("$db_driver:host=$db_host; dbname=$db_nome", $db_usuario, $db_senha);
             # Garante que o PDO lance exceções durante erros.
             self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             # Garante que os dados sejam armazenados com codificação UFT-8.
             self::$db->exec('SET NAMES utf8');
-        }
-        catch (PDOException $e)
-        {
+        } catch (PDOException $e) {
             # Envia um e-mail para o e-mail oficial do sistema, em caso de erro de conexão.
             mail($sistema_email, "PDOException em $sistema_titulo", $e->getMessage());
             # Então não carrega nada mais da página.
             die("Connection Error: " . $e->getMessage());
         }
     }
+
     # Método estático - acessível sem instanciação.
     public static function conexao()
     {
         # Garante uma única instância. Se não existe uma conexão, criamos uma nova.
-        if (!self::$db)
-        {
+        if (!self::$db) {
             new Banco();
         }
         # Retorna a conexão.

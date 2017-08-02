@@ -63,7 +63,7 @@ class Usuario
     {
         try {
             $db = BancoLogin::conexao();
-            $query = "SELECT u.usuario_id,u.login,g.grupo_id,g.nome as 'g_nome' FROM usuarios as u JOIN usuarios_grupos ug on u.usuario_id=ug.usuario_id JOIN grupos as g on g.grupo_id=ug.grupo_id WHERE u.statusUsuario = 'ATIVO' AND u.nomeBanco='{$banco}'";
+            $query = "SELECT u.usuario_id,u.login,g.grupo_id,g.nome as 'g_nome' FROM usuarios as u JOIN grupos as g on g.grupo_id=u.grupo_id WHERE u.statusUsuario = 'ATIVO' AND u.nomeBanco='{$banco}'";
             if ($usuario_id != 0) {
                 $query .= " AND u.usuario_id = :usuario_id LIMIT 1";
             }

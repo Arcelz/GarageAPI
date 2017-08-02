@@ -32,7 +32,6 @@ if($_SERVER["REQUEST_METHOD"] == "OPTIONS")
 
 
 $relatorio = new Relatorio();
-
 $request_method = $_SERVER["REQUEST_METHOD"];
 if ($request_method == 'GET') {
 	   $get = $_GET["relatorio_id"];

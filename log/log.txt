@@ -280,3 +280,38 @@ Usuario:  - 2017/07/03 03:17:20 - C:\xampp\htdocs\PHP\GarageAPI\Model\Grupo.php 
 Usuario:  - 2017/07/03 03:17:27 - C:\xampp\htdocs\PHP\GarageAPI\Model\Grupo.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'garage.grupos' doesn't exist 
 Usuario:  - 2017/07/03 04:15:18 - C:\xampp\htdocs\PHP\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens 
 Usuario:  - 2017/07/03 04:17:41 - C:\xampp\htdocs\PHP\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active.  Consider using PDOStatement::fetchAll().  Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute. 
+Usuario:  - 2017/07/28 21:19:56 - C:\xampp\htdocs\GarageAPI\Model\GrupoPermissao.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''Nenhum''' at line 1 
+Usuario:  - 2017/07/28 21:20:52 - C:\xampp\htdocs\GarageAPI\Model\GrupoPermissao.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'nomeBanco' in 'where clause' 
+Usuario:  - 2017/07/28 21:21:54 - C:\xampp\htdocs\GarageAPI\Model\GrupoPermissao.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'nomeBanco' in 'where clause' 
+Usuario:  - 2017/07/28 21:22:54 - C:\xampp\htdocs\GarageAPI\Model\GrupoPermissao.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'nomeBanco' in 'where clause' 
+Usuario:  - 2017/07/31 03:47:15 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'nomeBanco' cannot be null 
+Usuario:  - 2017/07/31 03:47:56 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''Testando'' at line 1 
+Usuario:  - 2017/07/31 04:01:33 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin3' for key 'login' 
+Usuario:  - 2017/07/31 04:02:22 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'CREATE TABLE `cargos` (
+  `pk_cargos` int(11) NOT NULL,
+  `nome` varchar(45) N' at line 3 
+Usuario:  - 2017/07/31 19:52:56 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testando123@hotmail.com' for key 'email' 
+Usuario:  - 2017/07/31 20:32:55 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty 
+Usuario:  - 2017/07/31 20:47:26 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''Testando';
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OL' at line 5 
+Usuario:  - 2017/07/31 20:48:55 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '{$_POST['banco']};
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+' at line 5 
+Usuario:  - 2017/07/31 20:49:30 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin4' for key 'login' 
+Usuario:  - 2017/07/31 20:49:48 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''Testando';
+-- -----------------------------------------------------
+-- Schema' at line 5 
+Usuario:  - 2017/07/31 20:50:18 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin5' for key 'login' 
+Usuario:  - 2017/07/31 21:24:24 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''Testando'; USE 'Testando';-- MySQL Script generated by Garage
+-- 07/31/17 19:5' at line 1 
+Usuario:  - 2017/07/31 21:27:26 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''Testando'; USE Testando;-- MySQL Script generated by Garage
+-- 07/31/17 19:58:' at line 1 
+Usuario:  - 2017/07/31 21:30:01 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testando4w512w3@hotmail.com' for key 'email' 
+Usuario:  - 2017/08/02 04:48:00 - C:\xampp\htdocs\GarageAPI\Model\Usuario.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'controle_sistema.usuarios_grupos' doesn't exist 
+Usuario:  - 2017/08/02 04:48:41 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'nomeBanco' cannot be null 
+Usuario:  - 2017/08/02 04:49:00 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'nomeBanco' cannot be null 
+Usuario:  - 2017/08/02 04:49:24 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'email' cannot be null 
+Usuario:  - 2017/08/02 04:52:44 - C:\xampp\htdocs\GarageAPI\Model\Usuario.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'controle_sistema.usuarios_grupos' doesn't exist 

@@ -34,16 +34,13 @@ if($_SERVER["REQUEST_METHOD"] == "OPTIONS")
 $fornecedor = new Fornecedor();
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
 
-$permicao = $validaToken->token();
+$permicao = (array)$validaToken->token();
 header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
 
     case 'GET':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '8V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['fornecedorVisualizar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 if (!empty($_GET["fornecedor_id"])) {
                     $fornecedor_id = intval($_GET["fornecedor_id"]);
 
@@ -53,20 +50,14 @@ switch ($request_method) {
                     $fornecedor->get_Fornecedor();
 
                 }
-
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
         break;
     case 'POST':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '8C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['fornecedorCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 $validacao = new ValidacaoVazio();
 
                 $returnValidacao = $validacao->verificaCamposEndereco();
@@ -84,10 +75,8 @@ switch ($request_method) {
                     echo json_encode($returnValidacao);
 
                 }
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
@@ -95,9 +84,7 @@ switch ($request_method) {
         break;
     case 'PUT':
 
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '8C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['fornecedorCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 $validacao = new ValidacaoVazio();
 
                 $returnValidacao = $validacao->verificaCamposEndereco();
@@ -117,28 +104,21 @@ switch ($request_method) {
                     echo json_encode($returnValidacao);
 
                 }
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
 
         break;
     case 'DELETE':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '8D') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['fornecedorDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 // Delete Product
                 $fornecedor_id = intval($_GET["fornecedor_id"]);
                 $fornecedor->delete_Fornecedor($fornecedor_id);
 
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 

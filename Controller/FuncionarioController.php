@@ -83,8 +83,6 @@ switch ($request_method) {
         if (isset($permicao['funcionarioDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
             $funcionario_id = intval($_GET["funcionario_id"]);
             $funcionario->delete_Funcionario($funcionario_id);
-
-            return $verificado = false;
         } else {
             header("HTTP/1.0 203 Acesso não permitido");
         }

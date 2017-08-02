@@ -97,5 +97,13 @@ class ValidaToken
 
     }
 
+    function busca_banco()
+    {
+        $parser = new Parser();
+        $token = ValidaToken::recebe_token();
+        $oToken = $parser->parse($token);
+        $banco = $oToken->getClaim('Permicao');
+        return $banco;
+    }
 
 }

@@ -3,6 +3,7 @@
 require_once 'BancoLogin.php';
 require_once '../log/GeraLog.php';
 require_once '../Validation/ValidaToken.php';
+require_once '../util/Arquivo.php';
 
 class UsuarioAdmin
 {
@@ -26,19 +27,6 @@ class UsuarioAdmin
     {
         try {
             $db = BancoLogin::conexao();
-          /*  $db->exec(
-                "CREATE DATABASE IF NOT EXISTS `Nenhum`;
-    GRANT ALL ON `Nenhum`.* TO 'root'@'localhost';
-    FLUSH PRIVILEGES;");*/
-            $query = "INSERT INTO usuarios (login,senha,statusUsuario,email,nomeBanco,statusGeral) VALUES (:login,:senha,'ATIVO',:email,:banco,'PAGO')";
-            $stmt = $db->prepare($query);
-
-            $stmt->bindParam(':login', $_POST['login'], PDO::PARAM_STR);
-            $stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
-            $stmt->bindParam(':senha', password_hash($_POST['senha'], PASSWORD_DEFAULT, ['cost' => 10]), PDO::PARAM_STR);
-            $stmt->execute();
-            $usuarioId = $db->lastInsertId();
 
             $query = "INSERT INTO grupos (nome,descricao,nomeBanco) VALUES ('gerente','gerente',:banco)";
             $stmt = $db->prepare($query);
@@ -46,10 +34,31 @@ class UsuarioAdmin
             $stmt->execute();
             $grupoId = $db->lastInsertId();
 
+            $query = "INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoCriar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoVisualizar',:banco,{$grupoId});";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
+            $stmt->execute();
 
-            $query = "INSERT INTO usuarios_grupos (grupo_id,usuario_id) VALUES ('{$grupoId}','{$usuarioId}')";
+
+            $query = "INSERT INTO usuarios (login,senha,statusUsuario,email,nomeBanco,statusGeral,grupo_id) VALUES (:login,:senha,'ATIVO',:email,:banco,'PAGO',{$grupoId})";
+            $stmt = $db->prepare($query);
+
+            $stmt->bindParam(':login', $_POST['login'], PDO::PARAM_STR);
+            $stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
+            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
+            $stmt->bindParam(':senha', password_hash($_POST['senha'], PASSWORD_DEFAULT, ['cost' => 10]), PDO::PARAM_STR);
+            $stmt->execute();
+
+            $query = "INSERT INTO permissoes_sistema (modulo,nomeBanco) VALUES (:modulo,:banco)";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
+            $stmt->bindParam(':modulo', $_POST['modulo'], PDO::PARAM_STR);
+            $stmt->execute();
+
+            $query = "CREATE DATABASE IF NOT EXISTS {$_POST['banco']}; USE {$_POST['banco']};".Arquivo::retornaConteudo('../sql/scriptBanco.sql');
             $stmt = $db->prepare($query);
             $stmt->execute();
+
             $status = 200;
             $status_message = 'Usuario adicionado com sucesso';
         } catch (PDOException $e) {
@@ -107,13 +116,12 @@ class UsuarioAdmin
             $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
             $stmt->execute();
             var_dump($stmt->rowCount());
-            if($stmt->rowCount()!=0){
+            if ($stmt->rowCount() != 0) {
                 $response = array(
                     'status' => 200,
                     'status_message' => 'Usuario deletado com sucesso.'
                 );
-            }
-            else{
+            } else {
                 $response = array(
                     'status' => 200,
                     'status_message' => 'Usuario não encontrado.'

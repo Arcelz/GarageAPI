@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
 
 $grupo = new GrupoPermissao();//instancia a classe de usuario para a chamada das funcoes
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
-$permicao = $validaToken->token();
+$permicao = (array)$validaToken->token();
 header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
@@ -49,24 +49,6 @@ switch ($request_method) {
         if (isset($permicao['permissaoCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
             $grupo->insert_grupos($permicao['nomeBanco']);
         } else {
-            header("HTTP/1.0 203 Acesso não permitido");
-        }
-        break;
-    case 'PUT':
-        if (isset($permicao['permissaoCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-            $grupo_id = intval($_GET["grupo_id"]);
-            $grupo->update_grupo($grupo_id);
-        } else {
-            header("HTTP/1.0 203 Acesso não permitido");
-        }
-        break;
-    case 'DELETE':
-            if (isset($permicao['permissaoDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $grupo_id = intval($_GET["grupo_id"]);
-                $grupo->delete_grupo($grupo_id);
-                return $verificado = false;
-        }
-        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
         break;

@@ -34,17 +34,14 @@ if($_SERVER["REQUEST_METHOD"] == "OPTIONS")
 $cliente = new Cliente();
 
 $validaToken = new ValidaToken();//intancia a classe de validação de token onde sera feita a verificacao do token
-$permicao = $validaToken->token();
+$permicao = (array)$validaToken->token();
 
 header('Access-Control-Allow-Origin: *');
 $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
 
     case 'GET':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '2V') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['clienteVisualizar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 if (!empty($_GET["cliente_id"])) {
                     $cliente_id = intval($_GET["cliente_id"]);
 
@@ -54,21 +51,15 @@ switch ($request_method) {
                     $cliente->get_Cliente();
 
                 }
-
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+        else{
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
 
         break;
     case 'POST':
-
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '2C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['clienteCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
 
                 $validacao = new ValidacaoVazio();
                 $returnValidacao = $validacao->verificaCamposEndereco();
@@ -84,22 +75,16 @@ switch ($request_method) {
                     header("HTTP/1.0 400 ");
                     header('Content-Type: application/json');
                     echo json_encode($returnValidacao);
-
-                }
-
-                return $verificado = false;
             }
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
 
         break;
     case 'PUT':
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '2C') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['clienteCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
 
                 $validacao = new ValidacaoVazio();
 
@@ -119,27 +104,22 @@ switch ($request_method) {
 
                 }
 
-                return $verificado = false;
-            }
         }
-        if ($verificado) {
+       else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 
         break;
     case 'DELETE':
 
-        $verificado = true;
-        foreach ($permicao as $valor) {// percorre o array de permicoes
-            if ($valor == '2D') {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
+            if (isset($permicao['clienteDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 // Delete Product
                 $cliente_id = intval($_GET["cliente_id"]);
                 $cliente->delete_Cliente($cliente_id);
 
-                return $verificado = false;
-            }
+
         }
-        if ($verificado) {
+        else {
             header("HTTP/1.0 203 Acesso não permitido");
         }
 

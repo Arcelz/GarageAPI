@@ -1,6 +1,6 @@
 <?php
 
-require 'Banco.php';
+require_once 'Banco.php';
 require_once '../Validation/GerarData.php';
 require_once '../log/GeraLog.php';
 require_once  '../Validation/ValidaToken.php';
@@ -110,8 +110,8 @@ Class Compra
             $stmt->execute();
             $fk_Veiculo = $db->lastInsertId();//retorna o ultimo id
            // $dataCriacao = self::getData();
-            //Este bloco é responsavel por retornar o ultimo registro de venda realizado.
-            //Usamos este metado para mostrar organizado a quantidade de venda realizada. Para não ter que usar o id.
+            //Este bloco ï¿½ responsavel por retornar o ultimo registro de venda realizado.
+            //Usamos este metado para mostrar organizado a quantidade de venda realizada. Para nï¿½o ter que usar o id.
          /*   $queryCont = "SELECT pk_compra,numero FROM compras ORDER BY pk_compra DESC LIMIT 1 ";
             $stmt = $db->prepare($queryCont);
             $stmt->execute();
@@ -135,7 +135,7 @@ Class Compra
             $stmt->execute();
 
             
-            //Este bloco é responsavel pela inserção das vendas itens. usamos a variavel $returnn para verificar se
+            //Este bloco ï¿½ responsavel pela inserï¿½ï¿½o das vendas itens. usamos a variavel $returnn para verificar se
             // foi inserido a venda corretamente. Caso sim cai no IF e salva a vendas_itens
             
             $returnn = $stmt->rowCount();
@@ -240,7 +240,7 @@ Class Compra
              header("HTTP/1.0 400 ");
              self::getUsuario();
             $argumentos = "update.....";
-            self::geraLog( $argumentos, $e->getMessage()); //chama a função para gravar os logs
+            self::geraLog( $argumentos, $e->getMessage()); //chama a funï¿½ï¿½o para gravar os logs
 
         }
 
