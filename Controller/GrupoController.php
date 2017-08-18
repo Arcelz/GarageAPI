@@ -35,9 +35,9 @@ switch ($request_method) {
         if (isset($permicao['grupoVisualizar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
             if (!empty($_GET["grupo_id"])) {
                 $grupo_id = intval($_GET["grupo_id"]);
-                $grupo->get_grupos($grupo_id);
+                $grupo->get_grupos($grupo_id,$permicao['nomeBanco']);
             } else {
-                $grupo->get_grupos();
+                $grupo->get_grupos(0,$permicao['nomeBanco']);
             }
         } else {
             header("HTTP/1.0 203 Acesso não permitido");

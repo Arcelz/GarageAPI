@@ -91,8 +91,11 @@ class GrupoPermissao
             $query = "SELECT *  FROM permissoes WHERE nomeBanco = '{$banco}'";
             if ($grupo_id != 0) {
                 $query .= " AND grupo_id = :grupo_id";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':grupo_id', $grupo_id, PDO::PARAM_STR);
+            } else {
+                $stmt = $db->prepare($query);
             }
-            $stmt = $db->prepare($query);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $response[] = $row;

@@ -34,7 +34,7 @@ class UsuarioAdmin
             $stmt->execute();
             $grupoId = $db->lastInsertId();
 
-            $query = "INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoCriar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoVisualizar',:banco,{$grupoId});";
+            $query = "INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoCriar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoVisualizar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('grupoVisualizar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('grupoCriar',:banco,{$grupoId});";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
             $stmt->execute();

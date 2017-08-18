@@ -315,3 +315,6 @@ Usuario:  - 2017/08/02 04:48:41 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.p
 Usuario:  - 2017/08/02 04:49:00 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'nomeBanco' cannot be null 
 Usuario:  - 2017/08/02 04:49:24 - C:\xampp\htdocs\GarageAPI\Model\UsuarioAdmin.php  - Argumentos: Inserido ..... - ErroMysql: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'email' cannot be null 
 Usuario:  - 2017/08/02 04:52:44 - C:\xampp\htdocs\GarageAPI\Model\Usuario.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'controle_sistema.usuarios_grupos' doesn't exist 
+Usuario:  - 2017/08/03 14:50:41 - C:\xampp\htdocs\GarageAPI\Model\Grupo.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[HY093]: Invalid parameter number: no parameters were bound 
+Usuario:  - 2017/08/03 14:51:45 - C:\xampp\htdocs\GarageAPI\Model\Grupo.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[HY093]: Invalid parameter number: no parameters were bound 
+Usuario:  - 2017/08/03 14:53:30 - C:\xampp\htdocs\GarageAPI\Model\Grupo.php  - Argumentos: Pesquisando ..... - ErroMysql: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pk_grupo' in 'where clause' 
