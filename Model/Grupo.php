@@ -21,11 +21,11 @@ class Grupo
     }
 
 
-    function insert_grupos()
+    function insert_grupos($banco)
     {
         try {
             $db = BancoLogin::conexao();
-            $query = "INSERT INTO grupos (nome,descricao) VALUES (:nome,:descricao)";
+            $query = "INSERT INTO grupos (nome,descricao) VALUES (:nome,:descricao,nomeBanco = '{$banco}')";
             $stmt = $db->prepare($query);
 
             $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);
@@ -76,11 +76,11 @@ class Grupo
         echo json_encode($response);
     }
 
-    function delete_grupo($pk_grupo)
+    function delete_grupo($pk_grupo,$banco)
     {
         try {
             $db = BancoLogin::conexao();
-            $query = "DELETE FROM grupos WHERE pk_grupo=:pk_grupo";
+            $query = "DELETE FROM grupos WHERE pk_grupo=:pk_grupo AND nomeBanco = '{$banco}'";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':pk_grupo', $pk_grupo, PDO::PARAM_INT);
             $stmt->execute();
@@ -112,7 +112,7 @@ class Grupo
     }
 
 
-    function update_grupo($pk_grupo)
+    function update_grupo($pk_grupo,$banco)
     {
         try {
             $db = BancoLogin::conexao();
@@ -122,7 +122,7 @@ class Grupo
             $stmt->bindParam(':pk_grupo', $pk_grupo, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() != 0) {
-                $query = "UPDATE grupos SET nome = :nome,descricao = :descricao WHERE pk_grupo = :pk_grupo";
+                $query = "UPDATE grupos SET nome = :nome,descricao = :descricao WHERE pk_grupo = :pk_grupo AND nomeBanco = '{$banco}'";
                 $stmt = $db->prepare($query);
                 $stmt->bindParam(':nome', $post_vars['nome'], PDO::PARAM_STR);
                 $stmt->bindParam(':descricao', $post_vars['descricao'], PDO::PARAM_STR);

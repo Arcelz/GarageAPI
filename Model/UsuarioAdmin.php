@@ -30,13 +30,13 @@ class UsuarioAdmin
 
             $query = "INSERT INTO grupos (nome,descricao,nomeBanco) VALUES ('gerente','gerente',:banco)";
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
+            $stmt->bindParam(':banco', $_POST['cnpj'], PDO::PARAM_STR);
             $stmt->execute();
             $grupoId = $db->lastInsertId();
 
             $query = "INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoCriar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('permissaoVisualizar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('grupoVisualizar',:banco,{$grupoId});INSERT INTO permissoes (nome,nomeBanco,grupo_id) VALUES ('grupoCriar',:banco,{$grupoId});";
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
+            $stmt->bindParam(':banco', $_POST['cnpj'], PDO::PARAM_STR);
             $stmt->execute();
 
 
@@ -45,17 +45,28 @@ class UsuarioAdmin
 
             $stmt->bindParam(':login', $_POST['login'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
+            $stmt->bindParam(':banco', $_POST['cnpj'], PDO::PARAM_STR);
             $stmt->bindParam(':senha', password_hash($_POST['senha'], PASSWORD_DEFAULT, ['cost' => 10]), PDO::PARAM_STR);
+            $stmt->execute();
+
+            $query = "INSERT INTO empresas (nome,cnpj,logradouro,cidade,estado,pais) VALUES (:nomeEmpresa,:cnpj,:logradouro,:cidade,:estado,:pais)";
+            $stmt = $db->prepare($query);
+
+            $stmt->bindParam(':nomeEmpresa', $_POST['nomeEmpresa'], PDO::PARAM_STR);
+            $stmt->bindParam(':cnpj', $_POST['cnpj'], PDO::PARAM_STR);
+            $stmt->bindParam(':logradouro', $_POST['logradouro'], PDO::PARAM_STR);
+            $stmt->bindParam(':cidade',$_POST['cidade'],PDO::PARAM_STR);
+            $stmt->bindParam(':estado',$_POST['estado'],PDO::PARAM_STR);
+            $stmt->bindParam(':pais',$_POST['pais'],PDO::PARAM_STR);
             $stmt->execute();
 
             $query = "INSERT INTO permissoes_sistema (modulo,nomeBanco) VALUES (:modulo,:banco)";
             $stmt = $db->prepare($query);
-            $stmt->bindParam(':banco', $_POST['banco'], PDO::PARAM_STR);
+            $stmt->bindParam(':banco', $_POST['cnpj'], PDO::PARAM_STR);
             $stmt->bindParam(':modulo', $_POST['modulo'], PDO::PARAM_STR);
             $stmt->execute();
 
-            $query = "CREATE DATABASE IF NOT EXISTS {$_POST['banco']}; USE {$_POST['banco']};".Arquivo::retornaConteudo('../sql/scriptBanco.sql');
+            $query = "CREATE DATABASE IF NOT EXISTS {$_POST['cnpj']}; USE {$_POST['cnpj']};".Arquivo::retornaConteudo('../sql/scriptBanco.sql');
             $stmt = $db->prepare($query);
             $stmt->execute();
 

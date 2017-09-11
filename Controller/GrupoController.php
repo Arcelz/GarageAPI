@@ -45,7 +45,7 @@ switch ($request_method) {
         break;
     case 'POST':
             if (isset($permicao['grupoCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
-                $grupo->insert_grupos();
+                $grupo->insert_grupos($permicao['nomeBanco']);
             }
 
         else {
@@ -55,7 +55,7 @@ switch ($request_method) {
     case 'PUT':
             if (isset($permicao['grupoCriar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 $grupo_id = intval($_GET["grupo_id"]);
-                $grupo->update_grupo($grupo_id);
+                $grupo->update_grupo($grupo_id,$permicao['nomeBanco']);
             }
         else {
             header("HTTP/1.0 203 Acesso não permitido");
@@ -64,7 +64,7 @@ switch ($request_method) {
     case 'DELETE':
             if (isset($permicao['grupoDeletar'])) {// verifica se o usuario tem permicao para acessar se tive acessa as funcoes
                 $grupo_id = intval($_GET["grupo_id"]);
-                $grupo->delete_grupo($grupo_id);
+                $grupo->delete_grupo($grupo_id,$permicao['nomeBanco']);
             }
 
         else {
