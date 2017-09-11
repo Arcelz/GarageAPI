@@ -58,7 +58,8 @@ class Permissao
             $stmt->execute();
             $modulo = $stmt->fetch(PDO::FETCH_ASSOC);
             $modulo = $modulo['modulo'];
-            $response = UPermissao::modulo($modulo);
+            $response = new UPermissao();
+            $response = $response->modulo($modulo);
         } catch (PDOException $e) {
             $response = array(
                 'status' => 400,

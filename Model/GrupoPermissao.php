@@ -35,14 +35,15 @@ class GrupoPermissao
                 $grupoId[$row['grupo_id']] = true; // adiciona um array de ids que ira ter no banco do usuario que fez a requisição
                 $grupoNome = $row['nome'];
             }
-            if ($grupoNome==="gerente"){
+            if ($grupoNome === "gerente") {
                 if (isset($grupoId[$_POST['grupo_id']])) { // verifica se existe o id se sim deleta as permicoes
                     $query = "SELECT * FROM permissoes_sistema WHERE nomeBanco = '{$banco}'";
                     $stmt = $db->prepare($query);
                     $stmt->execute();
                     $modulo = $stmt->fetch(PDO::FETCH_ASSOC);
                     $modulo = $modulo['modulo'];
-                    $result = UPermissao::modulo($modulo);
+                    $result = new UPermissao();
+                    $result = $result->modulo($modulo);
                     $array = explode(",", $_POST['permissao']);
                     $array = array_unique($array, SORT_STRING);
                     $boleano = true;
@@ -73,8 +74,7 @@ class GrupoPermissao
                     $status = 400;
                     $status_message = 'Grupo não encontrado';
                 }
-            }
-            else{
+            } else {
                 $status = 400;
                 $status_message = 'Grupo gerente não pode ser modificado';
             }
