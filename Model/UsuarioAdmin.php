@@ -29,7 +29,7 @@ class UsuarioAdmin
         try {
             $db = BancoLogin::conexao();
 
-           $query = "INSERT INTO grupos (nome,descricao,nomeBanco) VALUES ('gerente','gerente',:banco)";
+            $query = "INSERT INTO grupos (nome,descricao,nomeBanco) VALUES ('gerente','gerente',:banco)";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':banco', $_POST['cnpj'], PDO::PARAM_STR);
             $stmt->execute();

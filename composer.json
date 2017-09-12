@@ -1,5 +1,6 @@
 {
-    "require": {
-        "lcobucci/jwt": "^3.2"
-    }
+  "require": {
+    "lcobucci/jwt": "^3.2",
+    "vlucas/valitron": "1.4.0"
+  }
 }

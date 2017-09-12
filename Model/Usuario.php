@@ -3,6 +3,9 @@
 require_once 'BancoLogin.php';
 require_once '../log/GeraLog.php';
 require_once '../Validation/ValidaToken.php';
+require_once '../Validation/ValidaModels/ValitronUsuario.php';
+require_once '../util/DataConversor.php';
+
 
 class Usuario
 {
@@ -24,32 +27,42 @@ class Usuario
 
     function insert_usuario($banco)
     {
-        try {
-            $db = BancoLogin::conexao();
-            $query = "INSERT INTO usuarios (login,senha,fk_funcionario,statusUsuario,email,nomeBanco,statusGeral) VALUES (:login,:senha,:fk_funcionario,'ATIVO',:email,'{$banco}','PAGO')";
-            $stmt = $db->prepare($query);
+        $data = new DataConversor();
+        $data = $data->converter();
+        $usuarioValida = new ValitronUsuario();
+        $usuarioValida = $usuarioValida->validaUsuarioPost($data);
+        if($usuarioValida === true) {
+            try {
+                $db = BancoLogin::conexao();
+                $query = "INSERT INTO usuarios (login,senha,fk_funcionario,statusUsuario,email,nomeBanco,statusGeral) VALUES (:login,:senha,:fk_funcionario,'ATIVO',:email,'{$banco}','PAGO')";
+                $stmt = $db->prepare($query);
 
-            $stmt->bindParam(':login', $_POST['login'], PDO::PARAM_STR);
-            $stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':senha', password_hash($_POST['senha'], PASSWORD_DEFAULT, ['cost' => 10]), PDO::PARAM_STR);
-            $stmt->bindParam(':fk_funcionario', $_POST['funcionario_id'], PDO::PARAM_INT);
-            $stmt->execute();
-            $usuarioId = $db->lastInsertId();
+                $stmt->bindParam(':login', $data['login'], PDO::PARAM_STR);
+                $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+                $stmt->bindParam(':senha', password_hash($data['senha'], PASSWORD_DEFAULT, ['cost' => 10]), PDO::PARAM_STR);
+                $stmt->bindParam(':fk_funcionario', $data['funcionario_id'], PDO::PARAM_INT);
+                $stmt->execute();
+                $usuarioId = $db->lastInsertId();
 
-            $query2 = "INSERT INTO usuarios_grupos (grupo_id,usuario_id) VALUES (:grupo_id,'{$usuarioId}')";
-            $stmt2 = $db->prepare($query2);
-            $stmt2->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_INT);
-            $stmt2->execute();
-            $status = 200;
-            $status_message = 'Usuario adicionado com sucesso';
-        } catch (PDOException $e) {
-            $status = 400;
-            $status_message = $e->getMessage();
+                $query2 = "INSERT INTO usuarios_grupos (grupo_id,usuario_id) VALUES (:grupo_id,'{$usuarioId}')";
+                $stmt2 = $db->prepare($query2);
+                $stmt2->bindParam(':grupo_id', $data['grupo_id'], PDO::PARAM_INT);
+                $stmt2->execute();
+                $status = 200;
+                $status_message = 'Usuario adicionado com sucesso';
+            } catch (PDOException $e) {
+                $status = 400;
+                $status_message = $e->getMessage();
 
-            self::getUsuario();
-            $argumentos = "Inserido .....";
-            self::geraLog($argumentos, $e->getMessage()); //chama a função para gravar os logs
+                self::getUsuario();
+                $argumentos = "Inserido .....";
+                self::geraLog($argumentos, $e->getMessage()); //chama a função para gravar os logs
 
+            }
+        }
+        else{
+            $status = 401;
+            $status_message = $usuarioValida;
         }
         $response = array(
             'status' => $status,
