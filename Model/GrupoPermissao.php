@@ -32,11 +32,10 @@ class GrupoPermissao
             $stmt = $db->prepare($query);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $grupoId[$row['grupo_id']] = true; // adiciona um array de ids que ira ter no banco do usuario que fez a requisição
-                $grupoNome = $row['nome'];
+                $grupoId[$row['grupo_id']] = $row['nome']; // adiciona um array de ids que ira ter no banco do usuario que fez a requisição
             }
-            if ($grupoNome === "gerente") {
-                if (isset($grupoId[$_POST['grupo_id']])) { // verifica se existe o id se sim deleta as permicoes
+            if (isset($grupoId[$_POST['grupo_id']])) { // verifica se existe o id se sim deleta as permicoes
+                if ($grupoId[$_POST['grupo_id']]!== "gerente") {
                     $query = "SELECT * FROM permissoes_sistema WHERE nomeBanco = '{$banco}'";
                     $stmt = $db->prepare($query);
                     $stmt->execute();
@@ -44,11 +43,11 @@ class GrupoPermissao
                     $modulo = $modulo['modulo'];
                     $result = new UPermissao();
                     $result = $result->modulo($modulo);
-                    $array = explode(",", $_POST['permissao']);
-                    $array = array_unique($array, SORT_STRING);
+                    $array = (Array)$_POST['permissao_id'];
+                    //$array = array_unique($array, SORT_STRING);
                     $boleano = true;
                     for ($i = 0; $i < count($array); $i++) {
-                        if (!isset($result[$array[$i]])) {
+                        if (!isset($result[$array[$i]["id"]])) {
                             $boleano = false;
                         }
                     }
@@ -58,25 +57,27 @@ class GrupoPermissao
                         $stmt->execute();
 
                         for ($i = 0; $i < count($array); $i++) {
-                            $query = "INSERT INTO permissoes(nome,nomeBanco,grupo_id) VALUES(:nome,'{$banco}',:grupo_id) ";
+                            $query = "INSERT INTO permissoes(nome,nomeBanco,grupo_id) VALUES(:nome,'$banco',:grupo_id) ";
                             $stmt = $db->prepare($query);
-                            $stmt->bindParam(':nome', $array[$i], PDO::PARAM_STR);
+                            $stmt->bindParam(':nome', $array[$i]["id"], PDO::PARAM_STR);
                             $stmt->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_INT);
                             $stmt->execute();
                         }
                         $status = 200;
                         $status_message = 'Grupo de permissão adicionado com sucesso';
+
                     } else {
                         $status = 400;
                         $status_message = 'Permissão não encontrada';
                     }
-                } else {
+                }
+                else{
                     $status = 400;
-                    $status_message = 'Grupo não encontrado';
+                    $status_message = 'Grupo gerente não pode ser editado';
                 }
             } else {
                 $status = 400;
-                $status_message = 'Grupo gerente não pode ser modificado';
+                $status_message = 'Grupo não encontrado';
             }
         } catch (PDOException $e) {
             $status = 400;

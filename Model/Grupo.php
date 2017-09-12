@@ -25,7 +25,7 @@ class Grupo
     {
         try {
             $db = BancoLogin::conexao();
-            $query = "INSERT INTO grupos (nome,descricao) VALUES (:nome,:descricao,nomeBanco = '{$banco}')";
+            $query = "INSERT INTO grupos (nome,descricao,nomeBanco) VALUES (:nome,:descricao,'$banco')";
             $stmt = $db->prepare($query);
 
             $stmt->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR);

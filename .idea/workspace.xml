@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6acf47b9-44b3-4462-a5f4-f56ab451ffc7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/Grupo.php" afterPath="$PROJECT_DIR$/Model/Grupo.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/GrupoPermissao.php" afterPath="$PROJECT_DIR$/Model/GrupoPermissao.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/Permissao.php" afterPath="$PROJECT_DIR$/Model/Permissao.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/UsuarioAdmin.php" afterPath="$PROJECT_DIR$/Model/UsuarioAdmin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/log/log.txt" afterPath="$PROJECT_DIR$/log/log.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/util/UPermissao.php" afterPath="$PROJECT_DIR$/util/UPermissao.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,8 +28,8 @@
       <file leaf-file-name="Permissao.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/Permissao.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="67" column="9" lean-forward="true" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
+            <state relative-caret-position="-283">
+              <caret line="7" column="9" lean-forward="false" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
               <folding>
                 <marker date="1505145975675" expanded="true" signature="833:910" ph="INSERT INTO permissoes_sistema... " />
                 <marker date="1505145975675" expanded="true" signature="1688:1749" ph="SELECT * FRO... permissoes_sistema" />
@@ -37,57 +38,55 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UsuarioAdminController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/UsuarioAdminController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-666">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UsuarioController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/UsuarioController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-724">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VeiculoController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/VeiculoController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-331">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UPermissao.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/util/UPermissao.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="26" lean-forward="true" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GrupoPermissao.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GrupoPermissao.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Model/GrupoPermissao.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="782">
-              <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+            <state relative-caret-position="315">
+              <caret line="64" column="25" lean-forward="true" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="25" />
               <folding>
-                <marker date="1505145928925" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
-                <marker date="1505145928925" expanded="true" signature="1400:1461" ph="SELECT * FRO... permissoes_sistema" />
-                <marker date="1505145928925" expanded="true" signature="2486:2568" ph="INSERT INTO permissoes... " />
-                <marker date="1505145928925" expanded="true" signature="3912:3966" ph="SELECT * FRO... permissoes" />
+                <marker date="1505201988953" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
+                <marker date="1505201988953" expanded="true" signature="1382:1443" ph="SELECT * FRO... permissoes_sistema" />
+                <marker date="1505201988953" expanded="true" signature="2472:2533" ph="INSERT INTO permissoes... " />
+                <marker date="1505201988953" expanded="true" signature="2472:2552" ph="INSERT INTO permissoes... " />
+                <marker date="1505201988953" expanded="true" signature="2472:2553" ph="INSERT INTO permissoes... " />
+                <marker date="1505201988953" expanded="true" signature="3915:3969" ph="SELECT * FRO... permissoes" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PermissaoNovo.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../Front-Garage/app/views/permissao/PermissaoNovo.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="67" column="55" lean-forward="false" selection-start-line="67" selection-start-column="55" selection-end-line="67" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Grupo.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Model/Grupo.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="530">
+              <caret line="54" column="33" lean-forward="true" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
+              <folding>
+                <marker date="1505199574362" expanded="true" signature="758:838" ph="INSERT INTO grupos... " />
+                <marker date="1505199574362" expanded="true" signature="1620:1669" ph="SELECT * FRO... grupos" />
+                <marker date="1505199574362" expanded="true" signature="2610:2680" ph="DELETE FROM " />
+                <marker date="1505199574362" expanded="true" signature="3882:3929" ph="SELECT * FRO... grupos" />
+                <marker date="1505199574362" expanded="true" signature="4142:4249" ph="UPDATE grupo... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../Front-Garage/app/core/data.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="273">
+              <caret line="50" column="38" lean-forward="false" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -100,9 +99,16 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Model/GrupoPermissao.php" />
         <option value="$PROJECT_DIR$/Model/Permissao.php" />
+        <option value="$PROJECT_DIR$/Model/FinanceiroEntrada.php" />
+        <option value="$PROJECT_DIR$/../Front-Garage/app/layout/menu.html" />
         <option value="$PROJECT_DIR$/util/UPermissao.php" />
+        <option value="$PROJECT_DIR$/Model/UsuarioAdmin.php" />
+        <option value="$PROJECT_DIR$/../Front-Garage/app/views/funcionario/FuncionarioListar.js" />
+        <option value="$PROJECT_DIR$/../Front-Garage/app/views/permissao/PermissaoNovo.js" />
+        <option value="$PROJECT_DIR$/../Front-Garage/app/core/data.js" />
+        <option value="$PROJECT_DIR$/Model/Grupo.php" />
+        <option value="$PROJECT_DIR$/Model/GrupoPermissao.php" />
       </list>
     </option>
   </component>
@@ -112,10 +118,15 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
+  <component name="PhpServers">
+    <servers>
+      <server host="localhost" id="9b4eab4f-ebe2-4973-9eba-3543661e237b" name="Unnamed" />
+    </servers>
+  </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
-    <option name="width" value="1372" />
+    <option name="width" value="1359" />
     <option name="height" value="728" />
   </component>
   <component name="ProjectView">
@@ -133,8 +144,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -175,7 +184,7 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
+              <option name="myItemId" value="imagens" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -193,19 +202,28 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Model" />
+              <option name="myItemId" value="imagens" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="06-2017" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
+    <property name="js.eslint.eslintPackage" value="" />
+    <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="PHP Web Application.Unnamed">
     <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
       <config-file value="" />
       <node-interpreter value="project" />
@@ -231,6 +249,9 @@
     </configuration>
     <configuration default="true" type="PhpSpecConfigurationType" factoryName="PHPSpec">
       <PhpTestRunnerSettings />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application">
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
@@ -262,6 +283,12 @@
       <recursive>false</recursive>
       <method />
     </configuration>
+    <configuration default="false" name="Unnamed" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" server_name="Unnamed">
+      <method />
+    </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="PHP Web Application.Unnamed" />
+    </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -276,23 +303,24 @@
       <workItem from="1505111308731" duration="101000" />
       <workItem from="1505111414812" duration="3000" />
       <workItem from="1505143426142" duration="28000" />
-      <workItem from="1505143483337" duration="3349000" />
+      <workItem from="1505143483337" duration="13561000" />
+      <workItem from="1505198670815" duration="3526000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3526000" />
+    <option name="totallyTimeSpent" value="17264000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1372" height="728" extended-state="0" />
+    <frame x="-8" y="0" width="1359" height="728" extended-state="1" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24926254" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25167537" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -303,7 +331,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39967638" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -313,39 +341,22 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="3" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Model/Permissao.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1505145975675" expanded="true" signature="833:910" ph="INSERT INTO permissoes_sistema... " />
-            <marker date="1505145975675" expanded="true" signature="1688:1749" ph="SELECT * FRO... permissoes_sistema" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/UsuarioAdmin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1309">
-          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Model/Grupo.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1505111748923" expanded="true" signature="758:842" ph="INSERT INTO grupos... " />
-            <marker date="1505111748923" expanded="true" signature="1624:1673" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="2614:2684" ph="DELETE FROM " />
-            <marker date="1505111748923" expanded="true" signature="3886:3933" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="4146:4253" ph="UPDATE grupo... " />
+            <marker date="1505199574362" expanded="true" signature="758:838" ph="INSERT INTO grupos... " />
+            <marker date="1505199574362" expanded="true" signature="1620:1669" ph="SELECT * FRO... grupos" />
+            <marker date="1505199574362" expanded="true" signature="2610:2680" ph="DELETE FROM " />
+            <marker date="1505199574362" expanded="true" signature="3882:3929" ph="SELECT * FRO... grupos" />
+            <marker date="1505199574362" expanded="true" signature="4142:4249" ph="UPDATE grupo... " />
           </folding>
         </state>
       </provider>
@@ -354,7 +365,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -401,7 +411,19 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1309">
           <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1505177369184" expanded="true" signature="867:948" ph="INSERT INTO grupos... " />
+            <marker date="1505177369184" expanded="true" signature="1365:1422" ph="INSERT INTO permissoes... " />
+            <marker date="1505177369184" expanded="true" signature="1365:1436" ph="INSERT INTO permissoes... " />
+            <marker date="1505177369184" expanded="true" signature="1365:1447" ph="INSERT INTO permissoes... " />
+            <marker date="1505177369184" expanded="true" signature="1668:1816" ph="INSERT INTO usuarios... " />
+            <marker date="1505177369184" expanded="true" signature="2255:2379" ph="INSERT INTO empresas... " />
+            <marker date="1505177369184" expanded="true" signature="2938:3011" ph="INSERT INTO permissoes_sistema... " />
+            <marker date="1505177369184" expanded="true" signature="4178:4383" ph="SELECT u.usu... usuarios" />
+            <marker date="1505177369184" expanded="true" signature="5369:5446" ph="UPDATE usuar... " />
+            <marker date="1505177369184" expanded="true" signature="6674:6725" ph="SELECT * FRO... usuarios" />
+            <marker date="1505177369184" expanded="true" signature="6942:7137" ph="UPDATE usuar... " />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -410,11 +432,11 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1505111748923" expanded="true" signature="758:842" ph="INSERT INTO grupos... " />
-            <marker date="1505111748923" expanded="true" signature="1624:1673" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="2614:2684" ph="DELETE FROM " />
-            <marker date="1505111748923" expanded="true" signature="3886:3933" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="4146:4253" ph="UPDATE grupo... " />
+            <marker date="1505199574362" expanded="true" signature="758:838" ph="INSERT INTO grupos... " />
+            <marker date="1505199574362" expanded="true" signature="1620:1669" ph="SELECT * FRO... grupos" />
+            <marker date="1505199574362" expanded="true" signature="2610:2680" ph="DELETE FROM " />
+            <marker date="1505199574362" expanded="true" signature="3882:3929" ph="SELECT * FRO... grupos" />
+            <marker date="1505199574362" expanded="true" signature="4142:4249" ph="UPDATE grupo... " />
           </folding>
         </state>
       </provider>
@@ -423,7 +445,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -452,152 +473,6 @@
             <marker date="1505110037047" expanded="true" signature="4550:4611" ph="SELECT * FRO... compras" />
             <marker date="1505110037047" expanded="true" signature="5187:5246" ph="UPDATE compr... " />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/Permissao.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1505145975675" expanded="true" signature="833:910" ph="INSERT INTO permissoes_sistema... " />
-            <marker date="1505145975675" expanded="true" signature="1688:1749" ph="SELECT * FRO... permissoes_sistema" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/UsuarioAdmin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1309">
-          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/Grupo.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1505111748923" expanded="true" signature="758:842" ph="INSERT INTO grupos... " />
-            <marker date="1505111748923" expanded="true" signature="1624:1673" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="2614:2684" ph="DELETE FROM " />
-            <marker date="1505111748923" expanded="true" signature="3886:3933" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="4146:4253" ph="UPDATE grupo... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/GrupoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/BancoLogin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/FinanceiroEntrada.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1505110037047" expanded="true" signature="1064:1152" ph="SELECT * FRO... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1221:1305" ph="SELECT * FRO... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1374:1463" ph="SELECT * FRO... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1518:1871" ph="SELECT sum(s... sum" />
-            <marker date="1505110037047" expanded="true" signature="1549:1697" ph="SELECT sum(v... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1717:1862" ph="SELECT sum(v... financeiros_saidas" />
-            <marker date="1505110037047" expanded="true" signature="1910:2017" ph="select sum(v... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="2054:2160" ph="select sum(v... financeiros_saidas" />
-            <marker date="1505110037047" expanded="true" signature="3498:3637" ph="UPDATE finan... " />
-            <marker date="1505110037047" expanded="true" signature="4550:4611" ph="SELECT * FRO... compras" />
-            <marker date="1505110037047" expanded="true" signature="5187:5246" ph="UPDATE compr... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/Permissao.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1505145975675" expanded="true" signature="833:910" ph="INSERT INTO permissoes_sistema... " />
-            <marker date="1505145975675" expanded="true" signature="1688:1749" ph="SELECT * FRO... permissoes_sistema" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/UsuarioAdmin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1309">
-          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/Grupo.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1505111748923" expanded="true" signature="758:842" ph="INSERT INTO grupos... " />
-            <marker date="1505111748923" expanded="true" signature="1624:1673" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="2614:2684" ph="DELETE FROM " />
-            <marker date="1505111748923" expanded="true" signature="3886:3933" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="4146:4253" ph="UPDATE grupo... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/GrupoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/BancoLogin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/FinanceiroEntrada.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1505110037047" expanded="true" signature="1064:1152" ph="SELECT * FRO... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1221:1305" ph="SELECT * FRO... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1374:1463" ph="SELECT * FRO... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1518:1871" ph="SELECT sum(s... sum" />
-            <marker date="1505110037047" expanded="true" signature="1549:1697" ph="SELECT sum(v... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="1717:1862" ph="SELECT sum(v... financeiros_saidas" />
-            <marker date="1505110037047" expanded="true" signature="1910:2017" ph="select sum(v... financeiros_entradas" />
-            <marker date="1505110037047" expanded="true" signature="2054:2160" ph="select sum(v... financeiros_saidas" />
-            <marker date="1505110037047" expanded="true" signature="3498:3637" ph="UPDATE finan... " />
-            <marker date="1505110037047" expanded="true" signature="4550:4611" ph="SELECT * FRO... compras" />
-            <marker date="1505110037047" expanded="true" signature="5187:5246" ph="UPDATE compr... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/UsuarioAdmin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1309">
-          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -616,10 +491,150 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Model/FinanceiroEntrada.php">
+    <entry file="file://$PROJECT_DIR$/Controller/CargoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-471">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/CompraController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-892">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/FinanceiroEntradaController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-572">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/FinanceiroSaidaController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-572">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/FornecedorController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1583">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/GrupoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-274">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/ModeloController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-932">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/MarcaController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="63" column="0" lean-forward="false" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/GrupoPermissaoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="41" column="28" lean-forward="false" selection-start-line="41" selection-start-column="28" selection-end-line="41" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/PermissaoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="40" column="30" lean-forward="true" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/RelatorioController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-398">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/ReparoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="39" column="49" lean-forward="false" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/TipoReparoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="42" column="53" lean-forward="false" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/TipoVeiculoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1365">
+          <caret line="106" column="0" lean-forward="true" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/VeiculoController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-331">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/VendaController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-587">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/routes/route.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/routes/route-run.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/dashboard/dashboard.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/controllers/MenuController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/FinanceiroEntrada.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="194" column="0" lean-forward="true" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
           <folding>
             <marker date="1505110037047" expanded="true" signature="1064:1152" ph="SELECT * FRO... financeiros_entradas" />
             <marker date="1505110037047" expanded="true" signature="1221:1305" ph="SELECT * FRO... financeiros_entradas" />
@@ -636,137 +651,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Model/Grupo.php">
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/layout/menu.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="33" column="29" lean-forward="false" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="29" />
-          <folding>
-            <marker date="1505111748923" expanded="true" signature="758:842" ph="INSERT INTO grupos... " />
-            <marker date="1505111748923" expanded="true" signature="1624:1673" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="2614:2684" ph="DELETE FROM " />
-            <marker date="1505111748923" expanded="true" signature="3886:3933" ph="SELECT * FRO... grupos" />
-            <marker date="1505111748923" expanded="true" signature="4146:4253" ph="UPDATE grupo... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/CargoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-471">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/CompraController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-892">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/FinanceiroEntradaController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-572">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/FinanceiroSaidaController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-572">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/FornecedorController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1583">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/GrupoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-274">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/ModeloController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-932">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/MarcaController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
-          <caret line="63" column="0" lean-forward="false" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/GrupoPermissaoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="41" column="28" lean-forward="false" selection-start-line="41" selection-start-column="28" selection-end-line="41" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/PermissaoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="40" column="30" lean-forward="true" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/RelatorioController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-398">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/ReparoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="39" column="49" lean-forward="false" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/TipoReparoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="42" column="53" lean-forward="false" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/TipoVeiculoController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1365">
-          <caret line="106" column="0" lean-forward="true" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/UsuarioAdminController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-666">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="85">
+          <caret line="291" column="68" lean-forward="false" selection-start-line="291" selection-start-column="68" selection-end-line="291" selection-end-column="68" />
         </state>
       </provider>
     </entry>
@@ -774,43 +662,137 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-724">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/VeiculoController.php">
+    <entry file="file://$PROJECT_DIR$/Controller/UsuarioAdminController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-331">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/VendaController.php">
+    <entry file="file://$PROJECT_DIR$/util/UPermissao.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-587">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="2040">
+          <caret line="120" column="9" lean-forward="false" selection-start-line="120" selection-start-column="9" selection-end-line="120" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Model/GrupoPermissao.php">
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/core/token.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        <state relative-caret-position="85">
+          <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/UsuarioAdmin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="22" column="43" lean-forward="false" selection-start-line="22" selection-start-column="43" selection-end-line="22" selection-end-column="43" />
           <folding>
-            <marker date="1505145928925" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
-            <marker date="1505145928925" expanded="true" signature="1400:1461" ph="SELECT * FRO... permissoes_sistema" />
-            <marker date="1505145928925" expanded="true" signature="2486:2568" ph="INSERT INTO permissoes... " />
-            <marker date="1505145928925" expanded="true" signature="3912:3966" ph="SELECT * FRO... permissoes" />
+            <marker date="1505177369184" expanded="true" signature="867:948" ph="INSERT INTO grupos... " />
+            <marker date="1505177369184" expanded="true" signature="1365:1422" ph="INSERT INTO permissoes... " />
+            <marker date="1505177369184" expanded="true" signature="1365:1436" ph="INSERT INTO permissoes... " />
+            <marker date="1505177369184" expanded="true" signature="1365:1447" ph="INSERT INTO permissoes... " />
+            <marker date="1505177369184" expanded="true" signature="1668:1816" ph="INSERT INTO usuarios... " />
+            <marker date="1505177369184" expanded="true" signature="2255:2379" ph="INSERT INTO empresas... " />
+            <marker date="1505177369184" expanded="true" signature="2938:3011" ph="INSERT INTO permissoes_sistema... " />
+            <marker date="1505177369184" expanded="true" signature="4178:4383" ph="SELECT u.usu... usuarios" />
+            <marker date="1505177369184" expanded="true" signature="5369:5446" ph="UPDATE usuar... " />
+            <marker date="1505177369184" expanded="true" signature="6674:6725" ph="SELECT * FRO... usuarios" />
+            <marker date="1505177369184" expanded="true" signature="6942:7137" ph="UPDATE usuar... " />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Compra.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="196" column="0" lean-forward="false" selection-start-line="196" selection-start-column="0" selection-end-line="196" selection-end-column="0" />
+          <folding>
+            <marker date="1505110036975" expanded="true" signature="994:1385" ph="SELECT c.pk_... compras" />
+            <marker date="1505110036975" expanded="true" signature="1494:1886" ph="SELECT c.pk_... compras" />
+            <marker date="1505110036975" expanded="true" signature="3386:3590" ph="INSERT INTO veiculos... " />
+            <marker date="1505110036975" expanded="true" signature="4983:5213" ph="INSERT INTO compras... " />
+            <marker date="1505110036975" expanded="true" signature="6412:6536" ph="INSERT INTO compras_itens... " />
+            <marker date="1505110036975" expanded="true" signature="7502:7820" ph="INSERT INTO financeiros_entradas... " />
+            <marker date="1505110036975" expanded="true" signature="9336:9637" ph="UPDATE compr... " />
+            <marker date="1505110036975" expanded="true" signature="10716:10777" ph="SELECT * FRO... compras" />
+            <marker date="1505110036975" expanded="true" signature="11342:11627" ph="UPDATE compr... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/views/funcionario/FuncionarioNovo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="76" column="50" lean-forward="false" selection-start-line="76" selection-start-column="50" selection-end-line="76" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Funcionario.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="144" column="31" lean-forward="false" selection-start-line="144" selection-start-column="31" selection-end-line="144" selection-end-column="31" />
+          <folding>
+            <marker date="1505110037280" expanded="true" signature="966:1219" ph="SELECT f.pk_... funcionarios" />
+            <marker date="1505110037280" expanded="true" signature="1393:1666" ph="Select f.nom... funcionarios" />
+            <marker date="1505110037280" expanded="true" signature="3296:3449" ph="INSERT INTO funcionarios... " />
+            <marker date="1505110037280" expanded="true" signature="4346:4518" ph="INSERT INTO funcionarios_enderecos... " />
+            <marker date="1505110037280" expanded="true" signature="6696:7080" ph="UPDATE funci... " />
+            <marker date="1505110037280" expanded="true" signature="7318:7683" ph="UPDATE funci... " />
+            <marker date="1505110037280" expanded="true" signature="9999:10070" ph="SELECT * FRO... funcionarios" />
+            <marker date="1505110037280" expanded="true" signature="10681:10749" ph="UPDATE funci... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/views/funcionario/FuncionarioListar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="36" column="40" lean-forward="true" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/core/data.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="50" column="38" lean-forward="false" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Grupo.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="54" column="33" lean-forward="true" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
+          <folding>
+            <marker date="1505199574362" expanded="true" signature="758:838" ph="INSERT INTO grupos... " />
+            <marker date="1505199574362" expanded="true" signature="1620:1669" ph="SELECT * FRO... grupos" />
+            <marker date="1505199574362" expanded="true" signature="2610:2680" ph="DELETE FROM " />
+            <marker date="1505199574362" expanded="true" signature="3882:3929" ph="SELECT * FRO... grupos" />
+            <marker date="1505199574362" expanded="true" signature="4142:4249" ph="UPDATE grupo... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/views/permissao/PermissaoNovo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="67" column="55" lean-forward="false" selection-start-line="67" selection-start-column="55" selection-end-line="67" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Model/Permissao.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="67" column="9" lean-forward="true" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
+        <state relative-caret-position="-283">
+          <caret line="7" column="9" lean-forward="false" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
           <folding>
             <marker date="1505145975675" expanded="true" signature="833:910" ph="INSERT INTO permissoes_sistema... " />
             <marker date="1505145975675" expanded="true" signature="1688:1749" ph="SELECT * FRO... permissoes_sistema" />
@@ -818,11 +800,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/UPermissao.php">
+    <entry file="file://$PROJECT_DIR$/imagens/09-2017/b3a64f91b5f7cc4ab739f28f9cd632b2.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imagens/06-2017/29c5c88b030b24bd2d648aa2c2c28cc7.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imagens/06-2017/73bbcc85c3ef9fc1a6418f982f3aae3d.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/GrupoPermissao.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="26" lean-forward="true" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
-          <folding />
+        <state relative-caret-position="315">
+          <caret line="64" column="25" lean-forward="true" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="25" />
+          <folding>
+            <marker date="1505201988953" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
+            <marker date="1505201988953" expanded="true" signature="1382:1443" ph="SELECT * FRO... permissoes_sistema" />
+            <marker date="1505201988953" expanded="true" signature="2472:2533" ph="INSERT INTO permissoes... " />
+            <marker date="1505201988953" expanded="true" signature="2472:2552" ph="INSERT INTO permissoes... " />
+            <marker date="1505201988953" expanded="true" signature="2472:2553" ph="INSERT INTO permissoes... " />
+            <marker date="1505201988953" expanded="true" signature="3915:3969" ph="SELECT * FRO... permissoes" />
+          </folding>
         </state>
       </provider>
     </entry>

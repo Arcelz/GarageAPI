@@ -58,12 +58,14 @@ class UPermissao
                     "veiculoVisualizar" => true,
                     "vendaCriar" => true,
                     "vendaDeletar" => true,
-                    "vendaVisualizar" => true
+                    "vendaVisualizar" => true,
+                    "entradaVisualizar" => true,
+                    "saidaVisualizar" => true
                 ];
                 break;
-                case 999:
+            case 999:
                 $data = [ // permissao completa
-                    "admin"=>true,
+                    "admin" => true,
                     "cargoCriar" => true,
                     "cargoVisualizar" => true,
                     "cargoDeletar" => true,
@@ -108,7 +110,9 @@ class UPermissao
                     "veiculoVisualizar" => true,
                     "vendaCriar" => true,
                     "vendaDeletar" => true,
-                    "vendaVisualizar" => true
+                    "vendaVisualizar" => true,
+                    "entradaVisualizar" => true,
+                    "saidaVisualizar" => true
                 ];
                 break;
             default:
