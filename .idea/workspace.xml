@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6acf47b9-44b3-4462-a5f4-f56ab451ffc7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/Grupo.php" afterPath="$PROJECT_DIR$/Model/Grupo.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/GrupoPermissao.php" afterPath="$PROJECT_DIR$/Model/GrupoPermissao.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/UsuarioAdmin.php" afterPath="$PROJECT_DIR$/Model/UsuarioAdmin.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/log/log.txt" afterPath="$PROJECT_DIR$/log/log.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/util/UPermissao.php" afterPath="$PROJECT_DIR$/util/UPermissao.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,15 +36,15 @@
       <file leaf-file-name="GrupoPermissao.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Model/GrupoPermissao.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="64" column="25" lean-forward="true" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="25" />
+            <state relative-caret-position="411">
+              <caret line="88" column="35" lean-forward="true" selection-start-line="88" selection-start-column="35" selection-end-line="88" selection-end-column="35" />
               <folding>
-                <marker date="1505201988953" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
-                <marker date="1505201988953" expanded="true" signature="1382:1443" ph="SELECT * FRO... permissoes_sistema" />
-                <marker date="1505201988953" expanded="true" signature="2472:2533" ph="INSERT INTO permissoes... " />
-                <marker date="1505201988953" expanded="true" signature="2472:2552" ph="INSERT INTO permissoes... " />
-                <marker date="1505201988953" expanded="true" signature="2472:2553" ph="INSERT INTO permissoes... " />
-                <marker date="1505201988953" expanded="true" signature="3915:3969" ph="SELECT * FRO... permissoes" />
+                <marker date="1505202812875" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
+                <marker date="1505202812875" expanded="true" signature="1383:1444" ph="SELECT * FRO... permissoes_sistema" />
+                <marker date="1505202812875" expanded="true" signature="2934:2995" ph="INSERT INTO permissoes... " />
+                <marker date="1505202812875" expanded="true" signature="2934:3014" ph="INSERT INTO permissoes... " />
+                <marker date="1505202812875" expanded="true" signature="2934:3015" ph="INSERT INTO permissoes... " />
+                <marker date="1505202812875" expanded="true" signature="4421:4475" ph="SELECT * FRO... permissoes" />
               </folding>
             </state>
           </provider>
@@ -85,7 +80,7 @@
         <entry file="file://$PROJECT_DIR$/../Front-Garage/app/core/data.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="273">
-              <caret line="50" column="38" lean-forward="false" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
+              <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -106,8 +101,8 @@
         <option value="$PROJECT_DIR$/Model/UsuarioAdmin.php" />
         <option value="$PROJECT_DIR$/../Front-Garage/app/views/funcionario/FuncionarioListar.js" />
         <option value="$PROJECT_DIR$/../Front-Garage/app/views/permissao/PermissaoNovo.js" />
-        <option value="$PROJECT_DIR$/../Front-Garage/app/core/data.js" />
         <option value="$PROJECT_DIR$/Model/Grupo.php" />
+        <option value="$PROJECT_DIR$/../Front-Garage/app/core/data.js" />
         <option value="$PROJECT_DIR$/Model/GrupoPermissao.php" />
       </list>
     </option>
@@ -304,15 +299,15 @@
       <workItem from="1505111414812" duration="3000" />
       <workItem from="1505143426142" duration="28000" />
       <workItem from="1505143483337" duration="13561000" />
-      <workItem from="1505198670815" duration="3526000" />
+      <workItem from="1505198670815" duration="4276000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17264000" />
+    <option name="totallyTimeSpent" value="18014000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1359" height="728" extended-state="1" />
+    <frame x="-8" y="0" width="1359" height="728" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25167537" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -759,14 +754,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/core/data.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="50" column="38" lean-forward="false" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Model/Grupo.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="530">
@@ -778,14 +765,6 @@
             <marker date="1505199574362" expanded="true" signature="3882:3929" ph="SELECT * FRO... grupos" />
             <marker date="1505199574362" expanded="true" signature="4142:4249" ph="UPDATE grupo... " />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/views/permissao/PermissaoNovo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="67" column="55" lean-forward="false" selection-start-line="67" selection-start-column="55" selection-end-line="67" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -815,17 +794,33 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/core/data.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Front-Garage/app/views/permissao/PermissaoNovo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="67" column="55" lean-forward="false" selection-start-line="67" selection-start-column="55" selection-end-line="67" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Model/GrupoPermissao.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="64" column="25" lean-forward="true" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="25" />
+        <state relative-caret-position="411">
+          <caret line="88" column="35" lean-forward="true" selection-start-line="88" selection-start-column="35" selection-end-line="88" selection-end-column="35" />
           <folding>
-            <marker date="1505201988953" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
-            <marker date="1505201988953" expanded="true" signature="1382:1443" ph="SELECT * FRO... permissoes_sistema" />
-            <marker date="1505201988953" expanded="true" signature="2472:2533" ph="INSERT INTO permissoes... " />
-            <marker date="1505201988953" expanded="true" signature="2472:2552" ph="INSERT INTO permissoes... " />
-            <marker date="1505201988953" expanded="true" signature="2472:2553" ph="INSERT INTO permissoes... " />
-            <marker date="1505201988953" expanded="true" signature="3915:3969" ph="SELECT * FRO... permissoes" />
+            <marker date="1505202812875" expanded="true" signature="839:889" ph="SELECT * FRO... grupos" />
+            <marker date="1505202812875" expanded="true" signature="1383:1444" ph="SELECT * FRO... permissoes_sistema" />
+            <marker date="1505202812875" expanded="true" signature="2934:2995" ph="INSERT INTO permissoes... " />
+            <marker date="1505202812875" expanded="true" signature="2934:3014" ph="INSERT INTO permissoes... " />
+            <marker date="1505202812875" expanded="true" signature="2934:3015" ph="INSERT INTO permissoes... " />
+            <marker date="1505202812875" expanded="true" signature="4421:4475" ph="SELECT * FRO... permissoes" />
           </folding>
         </state>
       </provider>

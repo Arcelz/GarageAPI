@@ -35,7 +35,7 @@ class GrupoPermissao
                 $grupoId[$row['grupo_id']] = $row['nome']; // adiciona um array de ids que ira ter no banco do usuario que fez a requisição
             }
             if (isset($grupoId[$_POST['grupo_id']])) { // verifica se existe o id se sim deleta as permicoes
-                if ($grupoId[$_POST['grupo_id']]!== "gerente") {
+                if ($grupoId[$_POST['grupo_id']] !== "gerente") {
                     $query = "SELECT * FROM permissoes_sistema WHERE nomeBanco = '{$banco}'";
                     $stmt = $db->prepare($query);
                     $stmt->execute();
@@ -43,35 +43,42 @@ class GrupoPermissao
                     $modulo = $modulo['modulo'];
                     $result = new UPermissao();
                     $result = $result->modulo($modulo);
-                    $array = (Array)$_POST['permissao_id'];
-                    //$array = array_unique($array, SORT_STRING);
-                    $boleano = true;
-                    for ($i = 0; $i < count($array); $i++) {
-                        if (!isset($result[$array[$i]["id"]])) {
-                            $boleano = false;
-                        }
-                    }
-                    if ($boleano) {
+                    if (!isset($_POST['permissao_id'])) {
                         $query = "DELETE p FROM permissoes as p WHERE grupo_id = {$_POST['grupo_id']}";
                         $stmt = $db->prepare($query);
                         $stmt->execute();
-
-                        for ($i = 0; $i < count($array); $i++) {
-                            $query = "INSERT INTO permissoes(nome,nomeBanco,grupo_id) VALUES(:nome,'$banco',:grupo_id) ";
-                            $stmt = $db->prepare($query);
-                            $stmt->bindParam(':nome', $array[$i]["id"], PDO::PARAM_STR);
-                            $stmt->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_INT);
-                            $stmt->execute();
-                        }
                         $status = 200;
-                        $status_message = 'Grupo de permissão adicionado com sucesso';
-
+                        $status_message = 'Permissões removidas com sucesso';
                     } else {
-                        $status = 400;
-                        $status_message = 'Permissão não encontrada';
+                        $array = (Array)$_POST['permissao_id'];
+                        // $array = array_unique($array, SORT_STRING);
+                        $boleano = true;
+                        for ($i = 0; $i < count($array); $i++) {
+                            if (!isset($result[$array[$i]["id"]])) {
+                                $boleano = false;
+                            }
+                        }
+                        if ($boleano) {
+                            $query = "DELETE p FROM permissoes as p WHERE grupo_id = {$_POST['grupo_id']}";
+                            $stmt = $db->prepare($query);
+                            $stmt->execute();
+
+                            for ($i = 0; $i < count($array); $i++) {
+                                $query = "INSERT INTO permissoes(nome,nomeBanco,grupo_id) VALUES(:nome,'$banco',:grupo_id) ";
+                                $stmt = $db->prepare($query);
+                                $stmt->bindParam(':nome', $array[$i]["id"], PDO::PARAM_STR);
+                                $stmt->bindParam(':grupo_id', $_POST['grupo_id'], PDO::PARAM_INT);
+                                $stmt->execute();
+                            }
+                            $status = 200;
+                            $status_message = 'Permissoes adicionadas com sucesso';
+
+                        } else {
+                            $status = 400;
+                            $status_message = 'Permissão não encontrada';
+                        }
                     }
-                }
-                else{
+                } else {
                     $status = 400;
                     $status_message = 'Grupo gerente não pode ser editado';
                 }
